@@ -5,9 +5,9 @@ tg.expand();
 const user = tg.initDataUnsafe?.user;
 let selectedPay = "";
 
+// ⚠️ ဒီနေရာမှာ Termux Session ၂ က URL ကို ထည့်ပါ
 const API_URL = "https://infinite-promoted-suit-restore.trycloudflare.com";
 
-// ===== Screens =====
 function showWallet() {
   document.getElementById("walletView").style.display = "block";
   document.getElementById("topupView").style.display = "none";
@@ -27,7 +27,6 @@ function showGames() {
   document.getElementById("gamesView").style.display = "block";
 }
 
-// ===== Balance =====
 async function loadBalance() {
   if (!user) return;
   try {
@@ -41,7 +40,6 @@ async function loadBalance() {
   } catch (e) { console.log("Balance error", e); }
 }
 
-// ===== Payment Method =====
 function selectPay(method, btn) {
   selectedPay = method;
   document.querySelectorAll(".pay-btn").forEach(b => b.classList.remove("active"));
@@ -50,7 +48,6 @@ function selectPay(method, btn) {
   document.getElementById("selectedMethod").innerText = method;
 }
 
-// ===== Submit Topup =====
 async function submitTopup() {
   if (!selectedPay) return tg.showAlert("ငွေလွှဲနည်းလမ်း ရွေးပါ");
   const amount = document.getElementById("topupAmount").value;
@@ -71,14 +68,13 @@ async function submitTopup() {
       })
     });
     const data = await res.json();
-    tg.showAlert(data.message);
+    tg.showAlert(data.message + "\n\n📸 ပြေစာပုံကို Bot Chat မှာ ပို့ပါ");
     showWallet();
   } catch (e) {
     tg.showAlert("Error — ပြန်စမ်းပါ");
   }
 }
 
-// ===== Buy =====
 async function buyItem(item, price) {
   try {
     const res = await fetch(API_URL + "/api/buy", {
