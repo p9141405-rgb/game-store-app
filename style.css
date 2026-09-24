@@ -1,0 +1,58 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, sans-serif;
+  background: #1a1a1a;
+  color: #fff;
+  padding: 16px;
+  min-height: 100vh;
+}
+
+.container { max-width: 500px; margin: 0 auto; }
+
+h1 {
+  color: #2AABEE;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+#greeting {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #aaa;
+}
+
+.card {
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  border: 1px solid #333;
+}
+
+.card h3 { color: #2AABEE; margin-bottom: 8px; }
+.card p { color: #aaa; font-size: 14px; margin-bottom: 12px; }
+
+.card button {
+  background: #2AABEE;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.card button:active { opacity: 0.7; }
+
+.main-btn {
+  background: #333;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  width: 100%;
+  margin-top: 12px;
+  font-size: 15px;
+}

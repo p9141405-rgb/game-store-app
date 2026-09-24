@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Store</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🎮 Game Store</h1>
+    <p id="greeting">ကြိုဆိုပါတယ်!</p>
+
+    <div class="card">
+      <h3>Game 1</h3>
+      <p>ရောင်းရန် ဂိမ်း</p>
+      <button onclick="buy('Game 1')">ဝယ်မည်</button>
+    </div>
+
+    <div class="card">
+      <h3>Game 2</h3>
+      <p>ရောင်းရန် ဂိမ်း</p>
+      <button onclick="buy('Game 2')">ဝယ်မည်</button>
+    </div>
+
+    <button class="main-btn" onclick="closeApp()">ပိတ်မည်</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
