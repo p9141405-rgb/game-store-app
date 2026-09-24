@@ -5,7 +5,7 @@ tg.expand();
 const user = tg.initDataUnsafe?.user;
 let selectedPay = "";
 
-const API_URL = "https://mention-kurt-flag-arranged.trycloudflare.com";
+const API_URL = "https://framework-informed-column-forms.trycloudflare.com";
 
 // ===== Screens =====
 function showWallet() {
