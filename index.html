@@ -3,97 +3,118 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SafeZone Game Store</title>
+  <title>SafeZone Store</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app">
 
-    <!-- Header with SafeZone Logo -->
-    <header class="header">
-      <img src="logo.png" class="logo-img" alt="SafeZone">
-      <div>
-        <h1>SafeZone Store</h1>
-        <p id="greeting">ကြိုဆိုပါတယ်</p>
+  <!-- Wallet View -->
+  <div id="walletView" class="screen">
+    <div class="wallet-card">
+      <div class="wallet-top">
+        <span>💰 ကျွန်ုပ်၏ Wallet</span>
+        <span id="userName">User</span>
       </div>
-    </header>
+      <div class="wallet-balance">
+        <h2 id="balance">0</h2>
+        <p>ကျပ်</p>
+      </div>
+      <div class="wallet-actions">
+        <button onclick="showTopup()">➕ ငွေဖြည့်</button>
+        <button onclick="showGames()">🎮 ဂိမ်းဝယ်</button>
+      </div>
+    </div>
+  </div>
 
-    <div class="search-box">
-      <input type="text" id="search" placeholder="ဂိမ်း ရှာပါ..." oninput="filterGames()">
+  <!-- Topup View -->
+  <div id="topupView" class="screen" style="display:none;">
+    <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
+    <h2 class="page-title">💰 ငွေဖြည့်မည်</h2>
+
+    <p class="label">ငွေလွှဲမည့် နည်းလမ်း ရွေးပါ</p>
+    <div class="pay-methods">
+      <button class="pay-btn" onclick="selectPay('KBZ Pay', this)">KBZ Pay</button>
+      <button class="pay-btn" onclick="selectPay('Wave Money', this)">Wave Money</button>
+      <button class="pay-btn" onclick="selectPay('UAB Pay', this)">UAB Pay</button>
+      <button class="pay-btn" onclick="selectPay('AYA Pay', this)">AYA Pay</button>
     </div>
 
-    <div class="categories">
-      <button class="cat active" onclick="filterCat('all', this)">အားလုံး</button>
-      <button class="cat" onclick="filterCat('game', this)">ဂိမ်း</button>
-      <button class="cat" onclick="filterCat('app', this)">App</button>
-    </div>
+    <div id="payInfo" style="display:none;">
+      <div class="info-box">
+        <p class="info-title">📌 ငွေလွှဲရမည့် အချက်အလက်</p>
+        <p>📞 ဖုန်းနံပါတ်: <b>09763442881</b></p>
+        <p>👤 အမည်: <b>Pyae Phyo Kyaw</b></p>
+        <p>🏦 နည်းလမ်း: <b id="selectedMethod">-</b></p>
+      </div>
 
+      <p class="label">ငွေလွှဲပမာဏ ထည့်ပါ</p>
+      <input type="number" id="topupAmount" placeholder="ဥပမာ — 5000" class="input">
+
+      <button class="submit-btn" onclick="submitTopup()">✅ Submit</button>
+    </div>
+  </div>
+
+  <!-- Games View -->
+  <div id="gamesView" class="screen" style="display:none;">
+    <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
+    <h2 class="page-title">🎮 ဂိမ်းများ</h2>
     <div class="game-list">
-
-      <div class="game-card" data-name="Mobile Legends Bang Bang" data-cat="game">
-        <img src="mlbb.png" class="game-img" alt="MLBB">
+      <div class="game-card">
+        <img src="mlbb.png" class="game-img">
         <div class="game-info">
           <h3>Mobile Legends</h3>
-          <p>Diamond Top-Up</p>
-          <span class="price">စျေးနှုန်း မကြာမီ</span>
+          <p>Diamond ၈၆</p>
+          <span class="price">၅,၀၀၀ ကျပ်</span>
         </div>
-        <button class="buy-btn" onclick="buy('Mobile Legends Bang Bang')">ဝယ်မည်</button>
+        <button class="buy-btn" onclick="buyItem('Mobile Legends', 5000)">ဝယ်မည်</button>
       </div>
-
-      <div class="game-card" data-name="PUBG Mobile" data-cat="game">
-        <img src="pubg.png" class="game-img" alt="PUBG">
+      <div class="game-card">
+        <img src="pubg.png" class="game-img">
         <div class="game-info">
           <h3>PUBG Mobile</h3>
-          <p>UC Top-Up</p>
-          <span class="price">စျေးနှုန်း မကြာမီ</span>
+          <p>UC ၆၀</p>
+          <span class="price">၄,၅၀၀ ကျပ်</span>
         </div>
-        <button class="buy-btn" onclick="buy('PUBG Mobile')">ဝယ်မည်</button>
+        <button class="buy-btn" onclick="buyItem('PUBG Mobile', 4500)">ဝယ်မည်</button>
       </div>
-
-      <div class="game-card" data-name="Clash of Clans" data-cat="game">
-        <img src="coc.png" class="game-img" alt="COC">
+      <div class="game-card">
+        <img src="coc.png" class="game-img">
         <div class="game-info">
           <h3>Clash of Clans</h3>
-          <p>Gem Top-Up</p>
-          <span class="price">စျေးနှုန်း မကြာမီ</span>
+          <p>Gem ၅၀၀</p>
+          <span class="price">၅,၀၀၀ ကျပ်</span>
         </div>
-        <button class="buy-btn" onclick="buy('Clash of Clans')">ဝယ်မည်</button>
+        <button class="buy-btn" onclick="buyItem('Clash of Clans', 5000)">ဝယ်မည်</button>
       </div>
-
-      <div class="game-card" data-name="Roblox" data-cat="game">
-        <img src="roblox.png" class="game-img" alt="Roblox">
+      <div class="game-card">
+        <img src="roblox.png" class="game-img">
         <div class="game-info">
           <h3>Roblox</h3>
-          <p>Robux Top-Up</p>
-          <span class="price">စျေးနှုန်း မကြာမီ</span>
+          <p>Robux ၄၀၀</p>
+          <span class="price">၅,၀၀၀ ကျပ်</span>
         </div>
-        <button class="buy-btn" onclick="buy('Roblox')">ဝယ်မည်</button>
+        <button class="buy-btn" onclick="buyItem('Roblox', 5000)">ဝယ်မည်</button>
       </div>
-
-      <div class="game-card" data-name="Magic Chess Go Go" data-cat="game">
-        <img src="magic.png" class="game-img" alt="Magic Chess">
+      <div class="game-card">
+        <img src="magic.png" class="game-img">
         <div class="game-info">
-          <h3>Magic Chess Go Go</h3>
-          <p>Diamond Top-Up</p>
-          <span class="price">စျေးနှုန်း မကြာမီ</span>
+          <h3>Magic Chess</h3>
+          <p>Diamond ၈၆</p>
+          <span class="price">၅,၀၀၀ ကျပ်</span>
         </div>
-        <button class="buy-btn" onclick="buy('Magic Chess Go Go')">ဝယ်မည်</button>
+        <button class="buy-btn" onclick="buyItem('Magic Chess', 5000)">ဝယ်မည်</button>
       </div>
-
-      <div class="game-card" data-name="App Premium" data-cat="app">
-        <img src="premium.png" class="game-img" alt="Premium">
+      <div class="game-card">
+        <img src="premium.png" class="game-img">
         <div class="game-info">
           <h3>App Premium</h3>
-          <p>Premium Service</p>
-          <span class="price">စျေးနှုန်း မကြာမီ</span>
+          <p>၁ လ</p>
+          <span class="price">၃,၀၀၀ ကျပ်</span>
         </div>
-        <button class="buy-btn" onclick="buy('App Premium')">ဝယ်မည်</button>
+        <button class="buy-btn" onclick="buyItem('App Premium', 3000)">ဝယ်မည်</button>
       </div>
-
     </div>
-
-    <button class="close-btn" onclick="closeApp()">ပိတ်မည်</button>
   </div>
 
   <script src="app.js"></script>
