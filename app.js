@@ -5,7 +5,7 @@ tg.expand();
 const user = tg.initDataUnsafe?.user;
 let selectedPay = "";
 
-const API_URL = "https://ratings-hockey-brooklyn-buf.trycloudflare.com";
+const API_URL = "https://articles-bloomberg-tracy-premier.trycloudflare.com";
 
 // ===== Screens =====
 function showWallet() {
