@@ -56,6 +56,9 @@ async function submitTopup() {
   const amount = document.getElementById("topupAmount").value;
   if (!amount || amount < 1000) return tg.showAlert("အနည်းဆုံး ၁,၀၀၀ ကျပ်");
 
+  const receipt = document.getElementById("receipt").files[0];
+  if (!receipt) return tg.showAlert("ပြေစာ တင်ပါ");
+
   try {
     const res = await fetch(API_URL + "/api/topup", {
       method: "POST",
