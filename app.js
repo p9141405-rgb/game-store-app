@@ -48,31 +48,40 @@ function selectPay(method, btn) {
   document.getElementById("selectedMethod").innerText = method;
 }
 
+// ===== Submit Topup with Receipt =====
 async function submitTopup() {
   if (!selectedPay) return tg.showAlert("ငွေလွှဲနည်းလမ်း ရွေးပါ");
   const amount = document.getElementById("topupAmount").value;
   if (!amount || amount < 1000) return tg.showAlert("အနည်းဆုံး ၁,၀၀၀ ကျပ်");
 
-  const receipt = document.getElementById("receipt").files[0];
-  if (!receipt) return tg.showAlert("ပြေစာ တင်ပါ");
+  const receiptFile = document.getElementById("receipt").files[0];
+  if (!receiptFile) return tg.showAlert("ပြေစာ တင်ပါ");
 
-  try {
-    const res = await fetch(API_URL + "/api/topup", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        user_id: user.id,
-        user_name: user.first_name,
-        amount: parseInt(amount),
-        method: selectedPay
-      })
-    });
-    const data = await res.json();
-    tg.showAlert(data.message + "\n\n📸 ပြေစာပုံကို Bot Chat မှာ ပို့ပါ");
-    showWallet();
-  } catch (e) {
-    tg.showAlert("Error — ပြန်စမ်းပါ");
-  }
+  // ပြေစာပုံကို Base64 ပြောင်း
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    const receiptB64 = e.target.result.split(",")[1];
+    
+    try {
+      const res = await fetch(API_URL + "/api/topup", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          user_id: user.id,
+          user_name: user.first_name,
+          amount: parseInt(amount),
+          method: selectedPay,
+          receipt: receiptB64
+        })
+      });
+      const data = await res.json();
+      tg.showAlert(data.message);
+      showWallet();
+    } catch (err) {
+      tg.showAlert("Error — ပြန်စမ်းပါ");
+    }
+  };
+  reader.readAsDataURL(receiptFile);
 }
 
 async function buyItem(item, price) {
