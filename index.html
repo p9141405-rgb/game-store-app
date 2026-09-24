@@ -10,99 +10,93 @@
 <body>
   <div class="app">
 
-    <!-- Header -->
+    <!-- Header with Logo -->
     <header class="header">
-      <div class="logo"></div>
+      <img src="logo.png" class="logo-img" alt="SafeZone">
       <div>
         <h1>SafeZone Store</h1>
-        <p id="greeting"></p>
+        <p id="greeting">ကြိုဆိုပါတယ်</p>
       </div>
     </header>
 
     <!-- Search -->
     <div class="search-box">
-      <input type="text" id="search" placeholder="  ..." oninput="filterGames()">
+      <input type="text" id="search" placeholder="ဂိမ်း ရှာပါ..." oninput="filterGames()">
     </div>
 
     <!-- Category -->
     <div class="categories">
-      <button class="cat active" onclick="filterCat('all', this)"></button>
-      <button class="cat" onclick="filterCat('game', this)"></button>
+      <button class="cat active" onclick="filterCat('all', this)">အားလုံး</button>
+      <button class="cat" onclick="filterCat('game', this)">ဂိမ်း</button>
       <button class="cat" onclick="filterCat('app', this)">App</button>
     </div>
 
     <!-- Game List -->
-    <div class="game-list" id="gameList">
+    <div class="game-list">
 
-      <!-- 1. Mobile Legends -->
       <div class="game-card" data-name="Mobile Legends Bang Bang" data-cat="game">
-        <div class="game-icon" style="background: linear-gradient(135deg,#1e3c72,#2a5298);"></div>
+        <img src="mlbb.png" class="game-img" alt="MLBB">
         <div class="game-info">
           <h3>Mobile Legends</h3>
           <p>Diamond Top-Up</p>
-          <span class="price"> </span>
+          <span class="price">စျေးနှုန်း မကြာမီ</span>
         </div>
-        <button class="buy-btn" onclick="buy('Mobile Legends Bang Bang')"></button>
+        <button class="buy-btn" onclick="buy('Mobile Legends Bang Bang')">ဝယ်မည်</button>
       </div>
 
-      <!-- 2. PUBG Mobile -->
       <div class="game-card" data-name="PUBG Mobile" data-cat="game">
-        <div class="game-icon" style="background: linear-gradient(135deg,#f7971e,#ffd200);"></div>
+        <img src="pubg.png" class="game-img" alt="PUBG">
         <div class="game-info">
           <h3>PUBG Mobile</h3>
           <p>UC Top-Up</p>
-          <span class="price"> </span>
+          <span class="price">စျေးနှုန်း မကြာမီ</span>
         </div>
-        <button class="buy-btn" onclick="buy('PUBG Mobile')"></button>
+        <button class="buy-btn" onclick="buy('PUBG Mobile')">ဝယ်မည်</button>
       </div>
 
-      <!-- 3. Clash of Clans -->
       <div class="game-card" data-name="Clash of Clans" data-cat="game">
-        <div class="game-icon" style="background: linear-gradient(135deg,#56ab2f,#a8e063);"></div>
+        <img src="coc.png" class="game-img" alt="COC">
         <div class="game-info">
           <h3>Clash of Clans</h3>
           <p>Gem Top-Up</p>
-          <span class="price"> </span>
+          <span class="price">စျေးနှုန်း မကြာမီ</span>
         </div>
-        <button class="buy-btn" onclick="buy('Clash of Clans')"></button>
+        <button class="buy-btn" onclick="buy('Clash of Clans')">ဝယ်မည်</button>
       </div>
 
-      <!-- 4. Roblox -->
       <div class="game-card" data-name="Roblox" data-cat="game">
-        <div class="game-icon" style="background: linear-gradient(135deg,#e52d27,#b31217);"></div>
+        <img src="roblox.png" class="game-img" alt="Roblox">
         <div class="game-info">
           <h3>Roblox</h3>
           <p>Robux Top-Up</p>
-          <span class="price"> </span>
+          <span class="price">စျေးနှုန်း မကြာမီ</span>
         </div>
-        <button class="buy-btn" onclick="buy('Roblox')"></button>
+        <button class="buy-btn" onclick="buy('Roblox')">ဝယ်မည်</button>
       </div>
 
-      <!-- 5. Magic Chess Go Go -->
       <div class="game-card" data-name="Magic Chess Go Go" data-cat="game">
-        <div class="game-icon" style="background: linear-gradient(135deg,#8e2de2,#4a00e0);"></div>
+        <img src="magic.png" class="game-img" alt="Magic Chess">
         <div class="game-info">
           <h3>Magic Chess Go Go</h3>
           <p>Diamond Top-Up</p>
-          <span class="price"> </span>
+          <span class="price">စျေးနှုန်း မကြာမီ</span>
         </div>
-        <button class="buy-btn" onclick="buy('Magic Chess Go Go')"></button>
+        <button class="buy-btn" onclick="buy('Magic Chess Go Go')">ဝယ်မည်</button>
       </div>
 
-      <!-- 6. App Premium -->
       <div class="game-card" data-name="App Premium" data-cat="app">
-        <div class="game-icon" style="background: linear-gradient(135deg,#f12711,#f5af19);"></div>
+        <img src="premium.png" class="game-img" alt="Premium">
         <div class="game-info">
           <h3>App Premium</h3>
           <p>Premium Service</p>
-          <span class="price"> </span>
+          <span class="price">စျေးနှုန်း မကြာမီ</span>
         </div>
-        <button class="buy-btn" onclick="buy('App Premium')"></button>
+        <button class="buy-btn" onclick="buy('App Premium')">ဝယ်မည်</button>
       </div>
 
     </div>
 
-    <button class="close-btn" onclick="closeApp()"></button>
+    <button class="close-btn" onclick="closeApp()">ပိတ်မည်</button>
   </div>
 
   <script src="app.js"></script>
