@@ -8,7 +8,6 @@ let appOpen = true;
 let userProfile = null;
 let currentBalance = 0;
 
-//   URL  
 const API_URL = "https://highlighted-configure-mayor-sociology.trycloudflare.com";
 const ADMIN_USERNAME = "pyae_phyo_123";
 
@@ -130,9 +129,9 @@ const ITEMS = {
       { name: "1 Year [Mail & PW ]", price: 5000 },
       { type: "head", text: " Capcut Pro" },
       { name: "1 Month", price: 8500 },
-      { name: "1 Month (PC)", price: 1800 },
+      { name: "1 Month (PC)", price: 18000 },
       { type: "head", text: " Canva" },
-      { name: "Lifetime", price: 65000 },
+      { name: "Lifetime", price: 6500 },
       { type: "head", text: " ChatGPT Plus Official" },
       { name: "1 Month (Share)", price: 28000 },
       { name: "1 Month (Private)", price: 103000 },
@@ -260,46 +259,36 @@ async function confirmBuy() {
     );
   }
   
-  let confirmMsg = `  \n\n`;
-  confirmMsg += ` ${currentBuy.game}\n`;
-  confirmMsg += ` ${currentBuy.item}\n`;
-  confirmMsg += ` ${currentBuy.price.toLocaleString()} Ks\n`;
-  if (gameId !== "N/A") confirmMsg += ` ${gameId}\n`;
-  if (serverId) confirmMsg += ` ${serverId}\n`;
-  confirmMsg += `\n : ${currentBalance.toLocaleString()} Ks\n`;
-  confirmMsg += ` : ${currentBuy.price.toLocaleString()} Ks\n`;
-  confirmMsg += ` : ${(currentBalance - currentBuy.price).toLocaleString()} Ks`;
+  //  Popup   
+  tg.showAlert(" ...");
   
-  tg.showConfirm(confirmMsg, async (ok) => {
-    if (!ok) return;
-    try {
-      const res = await fetch(API_URL + "/api/buy", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          user_id: user.id,
-          user_name: userProfile?.name || user.first_name,
-          user_phone: userProfile?.phone || "",
-          user_username: user.username || "",
-          game: currentBuy.game,
-          item: currentBuy.item,
-          price: currentBuy.price,
-          game_id: gameId,
-          server_id: serverId,
-          note: note
-        })
-      });
-      const data = await res.json();
-      
-      if (data.success) {
-        showSuccess(data.new_balance);
-      } else {
-        tg.showAlert(data.message || " Error");
-      }
-    } catch (e) {
-      tg.showAlert(" Error — ");
+  try {
+    const res = await fetch(API_URL + "/api/buy", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        user_id: user.id,
+        user_name: userProfile?.name || user.first_name,
+        user_phone: userProfile?.phone || "",
+        user_username: user.username || "",
+        game: currentBuy.game,
+        item: currentBuy.item,
+        price: currentBuy.price,
+        game_id: gameId,
+        server_id: serverId,
+        note: note
+      })
+    });
+    const data = await res.json();
+    
+    if (data.success) {
+      showSuccess(data.new_balance);
+    } else {
+      tg.showAlert(data.message || " Error");
     }
-  });
+  } catch (e) {
+    tg.showAlert(" Error — ");
+  }
 }
 
 //  Success View
@@ -316,11 +305,7 @@ function showSuccess(newBalance) {
   });
   
   const box = document.getElementById("adminContactBox");
-  if (currentBuy.key === "premium") {
-    box.style.display = "block";
-  } else {
-    box.style.display = "block";
-  }
+  box.style.display = "block";
 }
 
 //  Admin   
