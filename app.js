@@ -4,10 +4,10 @@ tg.expand();
 
 const user = tg.initDataUnsafe?.user;
 let selectedPay = "";
+let appOpen = true;
 
 const API_URL = "https://strategy-daughters-via-burns.trycloudflare.com";
 
-// ===== Screens =====
 function showWallet() {
   document.getElementById("walletView").style.display = "block";
   document.getElementById("topupView").style.display = "none";
@@ -25,9 +25,20 @@ function showGames() {
   document.getElementById("walletView").style.display = "none";
   document.getElementById("topupView").style.display = "none";
   document.getElementById("gamesView").style.display = "block";
+  checkAppStatus();
 }
 
-// ===== Balance =====
+async function checkAppStatus() {
+  try {
+    const res = await fetch(API_URL + "/api/status");
+    const data = await res.json();
+    appOpen = data.app_open;
+    if (!appOpen) {
+      tg.showAlert("❌ ဝယ်ယူမှု ပိတ်ထားပါသည်");
+    }
+  } catch (e) { console.log(e); }
+}
+
 async function loadBalance() {
   if (!user) return;
   try {
@@ -38,10 +49,9 @@ async function loadBalance() {
     });
     const data = await res.json();
     document.getElementById("balance").innerText = data.balance.toLocaleString();
-  } catch (e) { console.log("Balance error", e); }
+  } catch (e) { console.log(e); }
 }
 
-// ===== Payment Method =====
 function selectPay(method, btn) {
   selectedPay = method;
   document.querySelectorAll(".pay-btn").forEach(b => b.classList.remove("active"));
@@ -50,7 +60,6 @@ function selectPay(method, btn) {
   document.getElementById("selectedMethod").innerText = method;
 }
 
-// ===== Submit Topup with Receipt =====
 async function submitTopup() {
   if (!selectedPay) return tg.showAlert("ငွေလွှဲနည်းလမ်း ရွေးပါ");
   const amount = document.getElementById("topupAmount").value;
@@ -62,7 +71,6 @@ async function submitTopup() {
   const reader = new FileReader();
   reader.onload = async function(e) {
     const receiptB64 = e.target.result.split(",")[1];
-    
     try {
       const res = await fetch(API_URL + "/api/topup", {
         method: "POST",
@@ -85,8 +93,8 @@ async function submitTopup() {
   reader.readAsDataURL(receiptFile);
 }
 
-// ===== Buy =====
 async function buyItem(item, price) {
+  if (!appOpen) return tg.showAlert("❌ ဝယ်ယူမှု ပိတ်ထားပါသည်");
   try {
     const res = await fetch(API_URL + "/api/buy", {
       method: "POST",
