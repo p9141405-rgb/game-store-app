@@ -6,7 +6,7 @@ const user = tg.initDataUnsafe?.user;
 let selectedPay = "";
 let appOpen = true;
 
-const API_URL = "https://strategy-daughters-via-burns.trycloudflare.com";
+const API_URL = "https://innovation-removed-spiritual-previously.trycloudflare.com";
 
 function showWallet() {
   document.getElementById("walletView").style.display = "block";
