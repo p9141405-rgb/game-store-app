@@ -8,11 +8,10 @@ let appOpen = true;
 let userProfile = null;
 let currentBalance = 0;
 
-// ⭐ Termux URL
-const API_URL = "https://highlighted-configure-mayor-sociology.trycloudflare.com";
+// ⭐ သင့် URL အသစ်
+const API_URL = "https://aruba-ser-tamil-fabrics.trycloudflare.com";
 const ADMIN_USERNAME = "pyae_phyo_12327";
 
-// ⭐ Toast Notification
 function showToast(message, type = "info") {
   const box = document.getElementById("toastBox");
   if (!box) return;
@@ -22,7 +21,6 @@ function showToast(message, type = "info") {
   setTimeout(() => { box.classList.remove("show"); }, 3500);
 }
 
-// ===== ITEMS DATA =====
 const ITEMS = {
   mlbb: {
     title: "Mobile Legends", img: "mlbb.png", needServer: true, needId: true,
