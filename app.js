@@ -8,18 +8,18 @@ let appOpen = true;
 let userProfile = null;
 let currentBalance = 0;
 
-//   Termux URL 
+//  Termux URL 
 const API_URL = "https://highlighted-configure-mayor-sociology.trycloudflare.com";
 const ADMIN_USERNAME = "pyae_phyo_12327";
 
-//  Toast Notification ( )
+//  Toast Notification
 function showToast(message, type = "info") {
   const box = document.getElementById("toastBox");
   if (!box) return;
   box.className = "toast-box " + type;
   box.innerText = message;
   setTimeout(() => box.classList.add("show"), 10);
-  setTimeout(() => { box.classList.remove("show"); }, 3000);
+  setTimeout(() => { box.classList.remove("show"); }, 3500);
 }
 
 // ===== ITEMS DATA =====
@@ -241,7 +241,7 @@ async function openBuy(key, gameTitle, itemName, price) {
   currentBuy = { key, game: gameTitle, item: itemName, price: price };
 }
 
-// ===== Confirm Buy =====
+//  Confirm Buy — Toast  
 async function confirmBuy() {
   if (!currentBuy) return;
   
@@ -262,7 +262,7 @@ async function confirmBuy() {
   const note = document.getElementById("buyNote").value.trim();
   
   if (currentBalance < currentBuy.price) {
-    return showToast("  ", "error");
+    return showToast("  \n : " + currentBuy.price.toLocaleString() + " Ks\n : " + currentBalance.toLocaleString() + " Ks", "error");
   }
   
   try {
@@ -285,8 +285,15 @@ async function confirmBuy() {
     const data = await res.json();
     
     if (data.success) {
-      showToast("  ", "success");
-      setTimeout(() => showSuccess(data.new_balance), 800);
+      showToast(
+        "  !\n" +
+        "\n" +
+        " " + currentBuy.item + "\n" +
+        " : " + currentBuy.price.toLocaleString() + " Ks\n" +
+        " : " + data.new_balance.toLocaleString() + " Ks",
+        "success"
+      );
+      setTimeout(() => showSuccess(data.new_balance), 1800);
     } else {
       showToast(data.message || " Error", "error");
     }
@@ -335,10 +342,10 @@ async function registerUser() {
     const data = await res.json();
     if (data.success) {
       localStorage.setItem("logged_in", "yes");
-      showToast(" !", "success");
+      showToast(" !\n " + data.user.name, "success");
       userProfile = data.user;
       document.getElementById("userName").innerText = data.user.name;
-      setTimeout(() => showWallet(), 800);
+      setTimeout(() => showWallet(), 1000);
     } else {
       showToast(data.message || "Error", "error");
     }
@@ -360,10 +367,10 @@ async function loginUser() {
     const data = await res.json();
     if (data.success) {
       localStorage.setItem("logged_in", "yes");
-      showToast(" !", "success");
+      showToast(" !\n " + data.user.name, "success");
       userProfile = data.user;
       document.getElementById("userName").innerText = data.user.name;
-      setTimeout(() => showWallet(), 800);
+      setTimeout(() => showWallet(), 1000);
     } else {
       showToast(data.message || "    ", "error");
     }
@@ -462,8 +469,8 @@ async function submitTopup() {
         })
       });
       const data = await res.json();
-      showToast(data.message, "success");
-      setTimeout(() => showWallet(), 800);
+      showToast(" Admin  \n " + parseInt(amount).toLocaleString() + " Ks\n  ", "success");
+      setTimeout(() => showWallet(), 1500);
     } catch (err) { showToast("Error — ", "error"); }
   };
   reader.readAsDataURL(receiptFile);
