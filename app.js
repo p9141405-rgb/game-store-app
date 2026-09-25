@@ -113,9 +113,25 @@ async function buyItem(item, price) {
   }
 }
 
-window.onload = () => {
+window.onload = async () => {
   if (user) {
     document.getElementById("userName").innerText = user.first_name;
     loadBalance();
+    
+    try {
+      const res = await fetch(API_URL + "/api/status");
+      const data = await res.json();
+      if (!data.app_open) {
+        document.body.innerHTML = `
+          <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f0f1a;color:#fff;text-align:center;padding:24px;font-family:sans-serif;">
+            <div>
+              <h1 style="font-size:64px;margin-bottom:16px;">🔒</h1>
+              <h2 style="color:#2AABEE;margin-bottom:12px;">Mini App ပိတ်ထားပါသည်</h2>
+              <p style="color:#8888aa;">Admin မှ ပြန်ဖွင့်သည်အထိ စောင့်ပါ</p>
+            </div>
+          </div>
+        `;
+      }
+    } catch (e) { console.log(e); }
   }
 };
