@@ -1,3 +1,108 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, 'Segoe UI', sans-serif;
+  background: #0f0f1a;
+  color: #fff;
+  min-height: 100vh;
+  padding: 16px;
+}
+
+.screen {
+  max-width: 500px;
+  margin: 0 auto;
+  padding-bottom: 30px;
+}
+
+/* ===== Wallet Card ===== */
+.wallet-card {
+  background: linear-gradient(135deg, #2AABEE, #7B2FF7);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 24px rgba(42,171,238,0.3);
+}
+
+.wallet-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 16px;
+  opacity: 0.95;
+}
+
+.wallet-balance {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.wallet-balance h2 { font-size: 36px; font-weight: 700; }
+.wallet-balance p { font-size: 16px; opacity: 0.9; }
+
+.wallet-actions { display: flex; gap: 10px; }
+
+.wallet-actions button {
+  flex: 1;
+  padding: 12px;
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.wallet-actions button:active { background: rgba(255,255,255,0.35); }
+
+/* ===== Section Title ===== */
+.section-title {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #fff;
+}
+
+/* ===== Game List ===== */
+.game-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.game-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #1a1a2e, #16162a);
+  border: 1px solid #2a2a4a;
+  border-radius: 16px;
+  padding: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.game-card:active {
+  transform: scale(0.98);
+  border-color: #2AABEE;
+}
+
+.game-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 12px;
+  flex-shrink: 0;
+  background: #000;
+}
+
+.game-info { flex: 1; min-width: 0; }
+.game-info h3 { font-size: 15px; color: #fff; margin-bottom: 3px; }
+.game-info p { font-size: 12px; color: #8888aa; }
+
+/* ===== Item Grid (Buying Menu) ===== */
 .item-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -9,12 +114,15 @@
   background: linear-gradient(135deg, #1a1a2e, #16162a);
   border: 1px solid #2a2a4a;
   border-radius: 12px;
-  padding: 12px;
+  padding: 14px;
   color: #fff;
   font-size: 13px;
   text-align: left;
   cursor: pointer;
   transition: 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .item-btn:active {
@@ -24,8 +132,7 @@
 
 .item-btn b {
   color: #2AABEE;
-  display: block;
-  margin-top: 4px;
+  font-size: 14px;
 }
 
 .section-head {
@@ -38,6 +145,96 @@
   border-bottom: 1px solid #2a2a4a;
 }
 
-.game-card {
+/* ===== Inputs & Forms ===== */
+.label {
+  font-size: 14px;
+  color: #8888aa;
+  margin: 16px 0 8px;
+  display: block;
+}
+
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  background: #1a1a2e;
+  border: 1px solid #2a2a4a;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  margin-bottom: 12px;
+}
+
+.input:focus { border-color: #2AABEE; }
+
+/* ===== Info Box ===== */
+.info-box {
+  background: linear-gradient(135deg, #1e1e3a, #1a1a2e);
+  border: 1px solid #2AABEE;
+  border-radius: 14px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.info-title {
+  font-size: 14px;
+  color: #2AABEE;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.info-box p { font-size: 14px; margin-bottom: 8px; color: #ccc; }
+.info-box b { color: #fff; font-size: 15px; }
+
+/* ===== Buttons ===== */
+.submit-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #2AABEE, #7B2FF7);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 12px;
   cursor: pointer;
+}
+
+.submit-btn:active { opacity: 0.8; }
+
+.back-btn {
+  padding: 8px 16px;
+  background: #1a1a2e;
+  color: #8888aa;
+  border: 1px solid #2a2a4a;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.page-title { font-size: 22px; margin-bottom: 20px; }
+
+/* ===== Payment Buttons ===== */
+.pay-methods {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.pay-btn {
+  padding: 16px;
+  background: #1a1a2e;
+  color: #fff;
+  border: 2px solid #2a2a4a;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pay-btn.active {
+  border-color: #2AABEE;
+  background: linear-gradient(135deg, #2AABEE, #7B2FF7);
 }
