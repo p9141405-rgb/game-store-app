@@ -5,7 +5,7 @@ tg.expand();
 const user = tg.initDataUnsafe?.user;
 let selectedPay = "";
 
-const API_URL = "https://marvel-truly-ranging-survive.trycloudflare.com";
+const API_URL = "https://strategy-daughters-via-burns.trycloudflare.com";
 
 // ===== Screens =====
 function showWallet() {
@@ -59,7 +59,6 @@ async function submitTopup() {
   const receiptFile = document.getElementById("receipt").files[0];
   if (!receiptFile) return tg.showAlert("ပြေစာ တင်ပါ");
 
-  // ပြေစာပုံကို Base64 ပြောင်း
   const reader = new FileReader();
   reader.onload = async function(e) {
     const receiptB64 = e.target.result.split(",")[1];
