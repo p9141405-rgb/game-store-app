@@ -5,20 +5,103 @@ tg.expand();
 const user = tg.initDataUnsafe?.user;
 let selectedPay = "";
 let appOpen = true;
+let userProfile = null;
 
+//   URL 
 const API_URL = "https://highlighted-configure-mayor-sociology.trycloudflare.com";
 
-function showWallet() {
-  document.getElementById("walletView").style.display = "block";
+// ===== Screen Management =====
+function hideAll() {
+  document.getElementById("loadingView").style.display = "none";
+  document.getElementById("registerView").style.display = "none";
+  document.getElementById("walletView").style.display = "none";
   document.getElementById("topupView").style.display = "none";
+  document.getElementById("profileView").style.display = "none";
+}
+
+function showWallet() {
+  hideAll();
+  document.getElementById("walletView").style.display = "block";
   loadBalance();
 }
 
 function showTopup() {
-  document.getElementById("walletView").style.display = "none";
+  hideAll();
   document.getElementById("topupView").style.display = "block";
 }
 
+function showProfile() {
+  hideAll();
+  document.getElementById("profileView").style.display = "block";
+  if (userProfile) {
+    document.getElementById("pName").innerText = userProfile.name || "-";
+    document.getElementById("pPhone").innerText = userProfile.phone || "-";
+    document.getElementById("pGameId").innerText = userProfile.game_id || "-";
+    document.getElementById("pUserId").innerText = userProfile.user_id || "-";
+    document.getElementById("pCreated").innerText = userProfile.created || "-";
+  }
+}
+
+// ===== Register User =====
+async function registerUser() {
+  const name = document.getElementById("regName").value.trim();
+  const phone = document.getElementById("regPhone").value.trim();
+  const gameId = document.getElementById("regGameId").value.trim();
+
+  if (!name) return tg.showAlert(" ");
+  if (!phone || phone.length < 7) return tg.showAlert("  ");
+
+  try {
+    const res = await fetch(API_URL + "/api/register", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        user_id: user.id,
+        first_name: user.first_name,
+        name: name,
+        phone: phone,
+        game_id: gameId
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      tg.showAlert(" !");
+      userProfile = data.user;
+      showWallet();
+    } else {
+      tg.showAlert(data.message || "Error");
+    }
+  } catch (e) {
+    tg.showAlert("Error — ");
+  }
+}
+
+// ===== Check User Status =====
+async function checkUser() {
+  try {
+    const res = await fetch(API_URL + "/api/user_status", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ user_id: user.id })
+    });
+    const data = await res.json();
+    
+    if (data.registered) {
+      userProfile = data.user;
+      document.getElementById("userName").innerText = data.user.name || user.first_name;
+      showWallet();
+    } else {
+      hideAll();
+      document.getElementById("registerView").style.display = "block";
+    }
+  } catch (e) {
+    console.log(e);
+    hideAll();
+    document.getElementById("registerView").style.display = "block";
+  }
+}
+
+// ===== App Status =====
 async function checkAppStatus() {
   try {
     const res = await fetch(API_URL + "/api/status");
@@ -30,6 +113,7 @@ async function checkAppStatus() {
   } catch (e) { console.log(e); }
 }
 
+// ===== Balance =====
 async function loadBalance() {
   if (!user) return;
   try {
@@ -43,6 +127,7 @@ async function loadBalance() {
   } catch (e) { console.log(e); }
 }
 
+// ===== Payment =====
 function selectPay(method, btn) {
   selectedPay = method;
   document.querySelectorAll(".pay-btn").forEach(b => b.classList.remove("active"));
@@ -68,7 +153,7 @@ async function submitTopup() {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
           user_id: user.id,
-          user_name: user.first_name,
+          user_name: userProfile?.name || user.first_name,
           amount: parseInt(amount),
           method: selectedPay,
           receipt: receiptB64
@@ -84,6 +169,7 @@ async function submitTopup() {
   reader.readAsDataURL(receiptFile);
 }
 
+// ===== Buy =====
 async function buyItem(item, price) {
   if (!appOpen) return tg.showAlert("  ");
   try {
@@ -92,7 +178,7 @@ async function buyItem(item, price) {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         user_id: user.id,
-        user_name: user.first_name,
+        user_name: userProfile?.name || user.first_name,
         item: item,
         price: price
       })
@@ -104,25 +190,13 @@ async function buyItem(item, price) {
   }
 }
 
+// ===== On Load =====
 window.onload = async () => {
   if (user) {
-    document.getElementById("userName").innerText = user.first_name;
-    loadBalance();
-    
-    try {
-      const res = await fetch(API_URL + "/api/status");
-      const data = await res.json();
-      if (!data.app_open) {
-        document.body.innerHTML = `
-          <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f0f1a;color:#fff;text-align:center;padding:24px;font-family:sans-serif;">
-            <div>
-              <h1 style="font-size:64px;margin-bottom:16px;"></h1>
-              <h2 style="color:#2AABEE;margin-bottom:12px;">Mini App </h2>
-              <p style="color:#8888aa;">Admin   </p>
-            </div>
-          </div>
-        `;
-      }
-    } catch (e) { console.log(e); }
+    await checkUser();
+    checkAppStatus();
+  } else {
+    hideAll();
+    document.getElementById("registerView").style.display = "block";
   }
 };

@@ -9,7 +9,41 @@
 </head>
 <body>
 
-  <div id="walletView" class="screen">
+  <!-- Loading -->
+  <div id="loadingView" class="screen" style="text-align:center; padding-top: 100px;">
+    <h1 style="font-size:48px;">🎮</h1>
+    <h2 style="color:#2AABEE;">SafeZone Store</h2>
+    <p style="color:#8888aa;">Loading...</p>
+  </div>
+
+  <!-- ⭐ Register View -->
+  <div id="registerView" class="screen" style="display:none;">
+    <div style="text-align:center; padding: 20px 0;">
+      <h1 style="font-size:48px; margin-bottom: 8px;">🎮</h1>
+      <h2 style="color:#2AABEE; margin-bottom: 4px;">SafeZone Store</h2>
+      <p style="color:#8888aa; font-size:13px;">အကောင့်ဖွင့်ပြီး ဝယ်ယူပါ</p>
+    </div>
+
+    <div class="info-box" style="margin-top: 20px;">
+      <p class="label" style="margin-top:0;">👤 သင့်အမည်</p>
+      <input type="text" id="regName" placeholder="ဥပမာ — Pyae Phyo" class="input">
+
+      <p class="label">📞 ဖုန်းနံပါတ်</p>
+      <input type="tel" id="regPhone" placeholder="ဥပမာ — 09xxxxxxxxx" class="input">
+
+      <p class="label">🎮 ဂိမ်း ID (ရှိရင် ထည့်ပါ)</p>
+      <input type="text" id="regGameId" placeholder="ဥပမာ — MLBB ID" class="input">
+    </div>
+
+    <button class="submit-btn" onclick="registerUser()">✅ အကောင့်ဖွင့်မည်</button>
+
+    <p style="text-align:center; color:#8888aa; font-size:12px; margin-top:20px;">
+      အကောင့်ဖွင့်ပြီးရင် ငွေဖြည့်ပြီး ဂိမ်းများ ဝယ်ယူနိုင်ပါပြီ
+    </p>
+  </div>
+
+  <!-- Main View -->
+  <div id="walletView" class="screen" style="display:none;">
     <div class="wallet-card">
       <div class="wallet-top">
         <span>💰 ကျွန်ုပ်၏ Wallet</span>
@@ -21,6 +55,7 @@
       </div>
       <div class="wallet-actions">
         <button onclick="showTopup()">➕ ငွေဖြည့်</button>
+        <button onclick="showProfile()">👤 Profile</button>
       </div>
     </div>
 
@@ -59,6 +94,20 @@
     </div>
   </div>
 
+  <!-- Profile View -->
+  <div id="profileView" class="screen" style="display:none;">
+    <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
+    <h2 class="page-title">👤 ကျွန်ုပ်၏ Profile</h2>
+    <div class="info-box">
+      <p>👤 အမည်: <b id="pName">-</b></p>
+      <p>📞 ဖုန်း: <b id="pPhone">-</b></p>
+      <p>🎮 ဂိမ်း ID: <b id="pGameId">-</b></p>
+      <p>🆔 Telegram ID: <b id="pUserId">-</b></p>
+      <p>📅 အကောင့်ဖွင့်ချိန်: <b id="pCreated">-</b></p>
+    </div>
+  </div>
+
+  <!-- Topup View -->
   <div id="topupView" class="screen" style="display:none;">
     <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
     <h2 class="page-title">💰 ငွေဖြည့်မည်</h2>
