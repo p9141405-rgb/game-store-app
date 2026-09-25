@@ -8,22 +8,27 @@ let appOpen = true;
 let userProfile = null;
 let currentBalance = 0;
 
-//  Termux URL —   
+//   Termux URL 
 const API_URL = "https://highlighted-configure-mayor-sociology.trycloudflare.com";
 const ADMIN_USERNAME = "pyae_phyo_12327";
 
-//  Toast Notification
+//  Toast Notification ( )
 function showToast(message, type = "info") {
   const box = document.getElementById("toastBox");
+  if (!box) return;
   box.className = "toast-box " + type;
   box.innerText = message;
   setTimeout(() => box.classList.add("show"), 10);
   setTimeout(() => { box.classList.remove("show"); }, 3000);
 }
 
+// ===== ITEMS DATA =====
 const ITEMS = {
   mlbb: {
-    title: "Mobile Legends", img: "mlbb.png", needServer: true, needId: true,
+    title: "Mobile Legends",
+    img: "mlbb.png",
+    needServer: true,
+    needId: true,
     items: [
       { type: "head", text: " Weekly Pass / Pass" },
       { name: "Weekly Pass", price: 6650 },
@@ -54,7 +59,10 @@ const ITEMS = {
     ]
   },
   pubg: {
-    title: "PUBG Mobile", img: "pubg.png", needServer: false, needId: true,
+    title: "PUBG Mobile",
+    img: "pubg.png",
+    needServer: false,
+    needId: true,
     items: [
       { type: "head", text: " UC" },
       { name: "UC 60", price: 4700 },
@@ -91,7 +99,10 @@ const ITEMS = {
     ]
   },
   magic: {
-    title: "Magic Chess Go Go", img: "magic.png", needServer: true, needId: true,
+    title: "Magic Chess Go Go",
+    img: "magic.png",
+    needServer: true,
+    needId: true,
     items: [
       { name: "Weekly Pass (WP)", price: 8500 },
       { type: "head", text: " Double 2X" },
@@ -115,7 +126,10 @@ const ITEMS = {
     ]
   },
   premium: {
-    title: "App Premium", img: "premium.png", needServer: false, needId: false,
+    title: "App Premium",
+    img: "premium.png",
+    needServer: false,
+    needId: false,
     items: [
       { name: " Tg SMS Free", price: 8000 },
       { type: "head", text: " Telegram Premium" },
@@ -144,6 +158,7 @@ const ITEMS = {
 let currentBuy = null;
 let currentBuyGameKey = "";
 
+// ===== Screen Management =====
 function hideAll() {
   ["loadingView", "registerView", "loginView", "walletView", "gameView", "topupView", "profileView", "buyView", "successView"].forEach(id => {
     const el = document.getElementById(id);
@@ -195,6 +210,7 @@ function showGame(key) {
   });
 }
 
+// ===== Open Buy =====
 async function openBuy(key, gameTitle, itemName, price) {
   hideAll();
   document.getElementById("buyView").style.display = "block";
@@ -225,7 +241,7 @@ async function openBuy(key, gameTitle, itemName, price) {
   currentBuy = { key, game: gameTitle, item: itemName, price: price };
 }
 
-//  Popup  — Toast  
+// ===== Confirm Buy =====
 async function confirmBuy() {
   if (!currentBuy) return;
   
@@ -270,7 +286,7 @@ async function confirmBuy() {
     
     if (data.success) {
       showToast("  ", "success");
-      setTimeout(() => showSuccess(data.new_balance), 1000);
+      setTimeout(() => showSuccess(data.new_balance), 800);
     } else {
       showToast(data.message || " Error", "error");
     }
@@ -279,6 +295,7 @@ async function confirmBuy() {
   }
 }
 
+// ===== Success View =====
 function showSuccess(newBalance) {
   hideAll();
   document.getElementById("successView").style.display = "block";
@@ -293,19 +310,13 @@ function showSuccess(newBalance) {
   document.getElementById("adminContactBox").style.display = "block";
 }
 
+//  Admin Chat   
 function openAdminChat() {
-  const msg = encodeURIComponent(
-    ` Admin \n\n` +
-    ` ${userProfile?.name || user.first_name} \n` +
-    ` : ${currentBuy.game}\n` +
-    ` : ${currentBuy.item}\n` +
-    ` : ${currentBuy.price.toLocaleString()} Ks\n\n` +
-    ` `
-  );
-  const url = `https://t.me/${ADMIN_USERNAME}?text=${msg}`;
+  const url = `https://t.me/${ADMIN_USERNAME}`;
   tg.openTelegramLink(url);
 }
 
+// ===== Register =====
 async function registerUser() {
   const name = document.getElementById("regName").value.trim();
   const phone = document.getElementById("regPhone").value.trim();
@@ -327,13 +338,14 @@ async function registerUser() {
       showToast(" !", "success");
       userProfile = data.user;
       document.getElementById("userName").innerText = data.user.name;
-      setTimeout(() => showWallet(), 1000);
+      setTimeout(() => showWallet(), 800);
     } else {
       showToast(data.message || "Error", "error");
     }
   } catch (e) { showToast("Error — ", "error"); }
 }
 
+// ===== Login =====
 async function loginUser() {
   const name = document.getElementById("loginName").value.trim();
   const pw = document.getElementById("loginPassword").value;
@@ -351,13 +363,14 @@ async function loginUser() {
       showToast(" !", "success");
       userProfile = data.user;
       document.getElementById("userName").innerText = data.user.name;
-      setTimeout(() => showWallet(), 1000);
+      setTimeout(() => showWallet(), 800);
     } else {
       showToast(data.message || "    ", "error");
     }
   } catch (e) { showToast("Error — ", "error"); }
 }
 
+// ===== Logout =====
 function logoutUser() {
   tg.showConfirm(" ?", (ok) => {
     if (ok) {
@@ -368,6 +381,7 @@ function logoutUser() {
   });
 }
 
+// ===== Check User =====
 async function checkUser() {
   const isLoggedIn = localStorage.getItem("logged_in");
   try {
@@ -391,6 +405,7 @@ async function checkUser() {
   } catch (e) { showRegister(); }
 }
 
+// ===== App Status =====
 async function checkAppStatus() {
   try {
     const res = await fetch(API_URL + "/api/status");
@@ -399,6 +414,7 @@ async function checkAppStatus() {
   } catch (e) { console.log(e); }
 }
 
+// ===== Balance =====
 async function loadBalance() {
   if (!user) return;
   try {
@@ -414,6 +430,7 @@ async function loadBalance() {
   } catch (e) { console.log(e); }
 }
 
+// ===== Payment Method =====
 function selectPay(method, btn) {
   selectedPay = method;
   document.querySelectorAll(".pay-btn").forEach(b => b.classList.remove("active"));
@@ -422,6 +439,7 @@ function selectPay(method, btn) {
   document.getElementById("selectedMethod").innerText = method;
 }
 
+// ===== Submit Topup =====
 async function submitTopup() {
   if (!selectedPay) return showToast(" ", "error");
   const amount = document.getElementById("topupAmount").value;
@@ -445,12 +463,13 @@ async function submitTopup() {
       });
       const data = await res.json();
       showToast(data.message, "success");
-      setTimeout(() => showWallet(), 1000);
+      setTimeout(() => showWallet(), 800);
     } catch (err) { showToast("Error — ", "error"); }
   };
   reader.readAsDataURL(receiptFile);
 }
 
+// ===== On Load =====
 window.onload = async () => {
   if (user) {
     await checkUser();
