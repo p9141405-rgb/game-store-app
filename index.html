@@ -1,118 +1,129 @@
-<!DOCTYPE html>
-<html lang="my">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SafeZone Store</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+const tg = window.Telegram.WebApp;
+tg.ready();
+tg.expand();
 
-  <div id="walletView" class="screen">
-    <div class="wallet-card">
-      <div class="wallet-top">
-        <span>💰 ကျွန်ုပ်၏ Wallet</span>
-        <span id="userName">User</span>
-      </div>
-      <div class="wallet-balance">
-        <h2 id="balance">0</h2>
-        <p>ကျပ်</p>
-      </div>
-      <div class="wallet-actions">
-        <button onclick="showTopup()">➕ ငွေဖြည့်</button>
-        <button onclick="showMLBB()">🎮 MLBB ID စစ်</button>
-      </div>
-    </div>
+const user = tg.initDataUnsafe?.user;
+let selectedPay = "";
+let appOpen = true;
 
-    <h3 class="section-title">🎮 ဂိမ်းများ</h3>
-    <div class="game-list">
-      <div class="game-card">
-        <img src="mlbb.png" class="game-img">
-        <div class="game-info"><h3>Mobile Legends</h3><p>Diamond ၈၆</p><span class="price">၅,၀၀၀ ကျပ်</span></div>
-        <button class="buy-btn" onclick="buyItem('Mobile Legends', 5000)">ဝယ်မည်</button>
-      </div>
-      <div class="game-card">
-        <img src="pubg.png" class="game-img">
-        <div class="game-info"><h3>PUBG Mobile</h3><p>UC ၆၀</p><span class="price">၄,၅၀၀ ကျပ်</span></div>
-        <button class="buy-btn" onclick="buyItem('PUBG Mobile', 4500)">ဝယ်မည်</button>
-      </div>
-      <div class="game-card">
-        <img src="coc.png" class="game-img">
-        <div class="game-info"><h3>Clash of Clans</h3><p>Gem ၅၀၀</p><span class="price">၅,၀၀၀ ကျပ်</span></div>
-        <button class="buy-btn" onclick="buyItem('Clash of Clans', 5000)">ဝယ်မည်</button>
-      </div>
-      <div class="game-card">
-        <img src="roblox.png" class="game-img">
-        <div class="game-info"><h3>Roblox</h3><p>Robux ၄၀၀</p><span class="price">၅,၀၀၀ ကျပ်</span></div>
-        <button class="buy-btn" onclick="buyItem('Roblox', 5000)">ဝယ်မည်</button>
-      </div>
-      <div class="game-card">
-        <img src="magic.png" class="game-img">
-        <div class="game-info"><h3>Magic Chess</h3><p>Diamond ၈၆</p><span class="price">၅,၀၀၀ ကျပ်</span></div>
-        <button class="buy-btn" onclick="buyItem('Magic Chess', 5000)">ဝယ်မည်</button>
-      </div>
-      <div class="game-card">
-        <img src="premium.png" class="game-img">
-        <div class="game-info"><h3>App Premium</h3><p>၁ လ</p><span class="price">၃,၀၀၀ ကျပ်</span></div>
-        <button class="buy-btn" onclick="buyItem('App Premium', 3000)">ဝယ်မည်</button>
-      </div>
-    </div>
-  </div>
+// ⭐ သင့် URL အသစ် ထည့်ပြီးသား
+const API_URL = "https://highlighted-configure-mayor-sociology.trycloudflare.com";
 
-  <div id="mlbbView" class="screen" style="display:none;">
-    <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
-    <h2 class="page-title">🎮 MLBB ID စစ်ဆေးခြင်း</h2>
+function showWallet() {
+  document.getElementById("walletView").style.display = "block";
+  document.getElementById("topupView").style.display = "none";
+  loadBalance();
+}
 
-    <p class="label">သင့် MLBB ID ထည့်ပါ</p>
-    <input type="number" id="mlbbId" placeholder="ဥပမာ — 172676928" class="input">
+function showTopup() {
+  document.getElementById("walletView").style.display = "none";
+  document.getElementById("topupView").style.display = "block";
+}
 
-    <p class="label">Server ID</p>
-    <input type="number" id="mlbbServer" placeholder="ဥပမာ — 2884" class="input">
+async function checkAppStatus() {
+  try {
+    const res = await fetch(API_URL + "/api/status");
+    const data = await res.json();
+    appOpen = data.app_open;
+    if (!appOpen) {
+      tg.showAlert("❌ ဝယ်ယူမှု ပိတ်ထားပါသည်");
+    }
+  } catch (e) { console.log(e); }
+}
 
-    <button class="submit-btn" onclick="checkMLBB()">🔍 စစ်ဆေးမည်</button>
+async function loadBalance() {
+  if (!user) return;
+  try {
+    const res = await fetch(API_URL + "/api/balance", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ user_id: user.id })
+    });
+    const data = await res.json();
+    document.getElementById("balance").innerText = data.balance.toLocaleString();
+  } catch (e) { console.log(e); }
+}
 
-    <div id="mlbbResult" style="display:none; margin-top: 16px;">
-      <div class="info-box">
-        <p class="info-title">✅ ID အတည်ပြုပြီး</p>
-        <p>👤 အမည်: <b id="resultName">-</b></p>
-        <p>🆔 ID: <b id="resultId">-</b></p>
-        <p>🌐 Server: <b id="resultServer">-</b></p>
-        <p>🌏 Region: <b id="resultRegion">-</b></p>
-      </div>
-    </div>
-  </div>
+function selectPay(method, btn) {
+  selectedPay = method;
+  document.querySelectorAll(".pay-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("payInfo").style.display = "block";
+  document.getElementById("selectedMethod").innerText = method;
+}
 
-  <div id="topupView" class="screen" style="display:none;">
-    <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
-    <h2 class="page-title">💰 ငွေဖြည့်မည်</h2>
+async function submitTopup() {
+  if (!selectedPay) return tg.showAlert("ငွေလွှဲနည်းလမ်း ရွေးပါ");
+  const amount = document.getElementById("topupAmount").value;
+  if (!amount || amount < 1000) return tg.showAlert("အနည်းဆုံး ၁,၀၀၀ ကျပ်");
 
-    <p class="label">ငွေလွှဲမည့် နည်းလမ်း ရွေးပါ</p>
-    <div class="pay-methods">
-      <button class="pay-btn" onclick="selectPay('KBZ Pay', this)">KBZ Pay</button>
-      <button class="pay-btn" onclick="selectPay('Wave Money', this)">Wave Money</button>
-      <button class="pay-btn" onclick="selectPay('UAB Pay', this)">UAB Pay</button>
-      <button class="pay-btn" onclick="selectPay('AYA Pay', this)">AYA Pay</button>
-    </div>
+  const receiptFile = document.getElementById("receipt").files[0];
+  if (!receiptFile) return tg.showAlert("ပြေစာ တင်ပါ");
 
-    <div id="payInfo" style="display:none;">
-      <div class="info-box">
-        <p class="info-title">📌 ငွေလွှဲရမည့် အချက်အလက်</p>
-        <p>📞 ဖုန်းနံပါတ်: <b>09763442881</b></p>
-        <p>👤 အမည်: <b>Pyae Phyo Kyaw</b></p>
-        <p>🏦 နည်းလမ်း: <b id="selectedMethod">-</b></p>
-      </div>
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    const receiptB64 = e.target.result.split(",")[1];
+    try {
+      const res = await fetch(API_URL + "/api/topup", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          user_id: user.id,
+          user_name: user.first_name,
+          amount: parseInt(amount),
+          method: selectedPay,
+          receipt: receiptB64
+        })
+      });
+      const data = await res.json();
+      tg.showAlert(data.message);
+      showWallet();
+    } catch (err) {
+      tg.showAlert("Error — ပြန်စမ်းပါ");
+    }
+  };
+  reader.readAsDataURL(receiptFile);
+}
 
-      <p class="label">ငွေလွှဲပမာဏ ထည့်ပါ</p>
-      <input type="number" id="topupAmount" placeholder="ဥပမာ — 5000" class="input">
+async function buyItem(item, price) {
+  if (!appOpen) return tg.showAlert("❌ ဝယ်ယူမှု ပိတ်ထားပါသည်");
+  try {
+    const res = await fetch(API_URL + "/api/buy", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        user_id: user.id,
+        user_name: user.first_name,
+        item: item,
+        price: price
+      })
+    });
+    const data = await res.json();
+    tg.showAlert(data.message);
+  } catch (e) {
+    tg.showAlert("Error");
+  }
+}
 
-      <p class="label">ပြေစာ (Screenshot) တင်ပါ</p>
-      <input type="file" id="receipt" accept="image/*" class="input">
-
-      <button class="submit-btn" onclick="submitTopup()">✅ Submit</button>
-    </div>
-  </div>
-
-  <script src="app.js"></script>
-</body>
-</html>
+window.onload = async () => {
+  if (user) {
+    document.getElementById("userName").innerText = user.first_name;
+    loadBalance();
+    
+    try {
+      const res = await fetch(API_URL + "/api/status");
+      const data = await res.json();
+      if (!data.app_open) {
+        document.body.innerHTML = `
+          <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f0f1a;color:#fff;text-align:center;padding:24px;font-family:sans-serif;">
+            <div>
+              <h1 style="font-size:64px;margin-bottom:16px;">🔒</h1>
+              <h2 style="color:#2AABEE;margin-bottom:12px;">Mini App ပိတ်ထားပါသည်</h2>
+              <p style="color:#8888aa;">Admin မှ ပြန်ဖွင့်သည်အထိ စောင့်ပါ</p>
+            </div>
+          </div>
+        `;
+      }
+    } catch (e) { console.log(e); }
+  }
+};
