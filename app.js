@@ -9,23 +9,165 @@ let userProfile = null;
 
 const API_URL = "https://highlighted-configure-mayor-sociology.trycloudflare.com";
 
+// ===== ITEMS DATA =====
+const ITEMS = {
+  mlbb: {
+    title: "Mobile Legends",
+    img: "mlbb.png",
+    items: [
+      { type: "head", text: " Weekly Pass / Pass" },
+      { name: "Weekly Pass", price: 6650 },
+      { name: "Miya Twilight Pass", price: 35000 },
+
+      { type: "head", text: " Diamonds" },
+      { name: "Diamond 86", price: 5500 },
+      { name: "Diamond 172", price: 11500 },
+      { name: "Diamond 257", price: 16300 },
+      { name: "Diamond 343", price: 21500 },
+      { name: "Diamond 429", price: 26800 },
+      { name: "Diamond 514", price: 31800 },
+      { name: "Diamond 600", price: 37000 },
+      { name: "Diamond 706", price: 42400 },
+      { name: "Diamond 878", price: 53000 },
+      { name: "Diamond 963", price: 58300 },
+      { name: "Diamond 1049", price: 63600 },
+      { name: "Diamond 1135", price: 68900 },
+      { name: "Diamond 1412", price: 84800 },
+      { name: "Diamond 2195", price: 128000 },
+      { name: "Diamond 3688", price: 213000 },
+      { name: "Diamond 5532", price: 319500 },
+      { name: "Diamond 9288", price: 530000 },
+
+      { type: "head", text: " Double 2X (ID + Server )" },
+      { name: "50+50", price: 4000 },
+      { name: "150+150", price: 12500 },
+      { name: "250+250", price: 17500 },
+      { name: "500+500", price: 34500 }
+    ]
+  },
+  pubg: {
+    title: "PUBG Mobile",
+    img: "pubg.png",
+    items: [
+      { type: "head", text: " UC" },
+      { name: "UC 60", price: 4700 },
+      { name: "UC 120", price: 9400 },
+      { name: "UC 180", price: 13900 },
+      { name: "UC 325", price: 22700 },
+      { name: "UC 660", price: 45300 },
+      { name: "UC 780", price: 52900 },
+      { name: "UC 1800", price: 114000 },
+      { name: "UC 3850", price: 226000 },
+      { name: "UC 8100", price: 440000 },
+
+      { type: "head", text: " Growth Pack" },
+      { name: "First Purchase", price: 5950 },
+      { name: "Firearm Materials", price: 14000 },
+      { name: "Mythic Emblem Pack", price: 22750 },
+
+      { type: "head", text: " Elite Pass" },
+      { name: "Elite Pass Lv1-50", price: 26000 },
+      { name: "Elite Pass Lv1-100", price: 52000 },
+      { name: "Elite Pass Plus Lv1-100", price: 112500 },
+
+      { type: "head", text: " Weekly Deal Pack" },
+      { name: "Weekly Mythic Emblem", price: 17000 },
+      { name: "Weekly Deal Pack 1", price: 6000 },
+      { name: "Weekly Deal Pack 2", price: 14500 },
+
+      { type: "head", text: " Prime (Normal)" },
+      { name: "Prime 1 Month", price: 6000 },
+      { name: "Prime 3 Month", price: 15000 },
+      { name: "Prime 6 Month", price: 27000 },
+      { name: "Prime 12 Month", price: 51000 },
+
+      { type: "head", text: " Prime (Plus)" },
+      { name: "Prime+ 1 Month", price: 46000 },
+      { name: "Prime+ 3 Month", price: 126000 },
+      { name: "Prime+ 6 Month", price: 245000 },
+      { name: "Prime+ 12 Month", price: 482000 }
+    ]
+  },
+  magic: {
+    title: "Magic Chess Go Go",
+    img: "magic.png",
+    items: [
+      { name: "Weekly Pass (WP)", price: 8500 },
+
+      { type: "head", text: " Double 2X ()" },
+      { name: "50+50", price: 4000 },
+      { name: "150+150", price: 11000 },
+      { name: "250+250", price: 18500 },
+      { name: "500+500", price: 35700 },
+
+      { type: "head", text: " Diamonds" },
+      { name: "Diamond 86", price: 6000 },
+      { name: "Diamond 172", price: 11900 },
+      { name: "Diamond 257", price: 17500 },
+      { name: "Diamond 344", price: 23000 },
+      { name: "Diamond 516", price: 34000 },
+      { name: "Diamond 706", price: 45000 },
+      { name: "Diamond 1346", price: 84200 },
+      { name: "Diamond 1825", price: 111500 },
+      { name: "Diamond 2195", price: 138000 },
+      { name: "Diamond 3688", price: 220000 },
+      { name: "Diamond 5532", price: 337500 },
+      { name: "Diamond 9288", price: 530000 }
+    ]
+  },
+  premium: {
+    title: "App Premium",
+    img: "premium.png",
+    items: [
+      { type: "head", text: " Tg SMS Free" },
+      { name: "Tg SMS Free", price: 8000 },
+
+      { type: "head", text: " Telegram Premium" },
+      { name: "1 Month Login", price: 19500 },
+      { name: "3 Month", price: 59000 },
+      { name: "6 Month", price: 7700 },
+      { name: "12 Month", price: 135000 },
+
+      { type: "head", text: " Subscription (Mail & PW)" },
+      { name: "1 Year", price: 5000 },
+
+      { type: "head", text: " Mobile Subscription" },
+      { name: "1 Month", price: 8500 },
+      { name: "1 Month (PC)", price: 1800 },
+      { name: "Lifetime", price: 65000 },
+
+      { type: "head", text: " ChatGPT Plus Official" },
+      { name: "1 Month (Share)", price: 28000 },
+      { name: "1 Month (Private)", price: 103000 },
+
+      { type: "head", text: " Family Plan" },
+      { name: "1 Month Family", price: 13000 },
+      { name: "3 Month Family", price: 21000 },
+      { name: "18 Month Family (Own)", price: 385000 },
+
+      { type: "head", text: " App Subscription" },
+      { name: "1 Month", price: 5000 },
+      { name: "1 Month (Premium)", price: 15500 },
+      { name: "1 Month (Basic)", price: 9000 },
+      { name: "1 Year", price: 42000 },
+      { name: "1 Month (Plus)", price: 6000 },
+      { name: "1 Month (Red)", price: 14000 }
+    ]
+  }
+};
+
+let currentBuy = null;
+
 // ===== Screen Management =====
 function hideAll() {
-  ["loadingView", "registerView", "loginView", "walletView", "topupView", "profileView"].forEach(id => {
+  ["loadingView", "registerView", "loginView", "walletView", "gameView", "topupView", "profileView", "buyView"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = "none";
   });
 }
 
-function showRegister() {
-  hideAll();
-  document.getElementById("registerView").style.display = "block";
-}
-
-function showLogin() {
-  hideAll();
-  document.getElementById("loginView").style.display = "block";
-}
+function showRegister() { hideAll(); document.getElementById("registerView").style.display = "block"; }
+function showLogin() { hideAll(); document.getElementById("loginView").style.display = "block"; }
 
 function showWallet() {
   hideAll();
@@ -33,10 +175,8 @@ function showWallet() {
   loadBalance();
 }
 
-function showTopup() {
-  hideAll();
-  document.getElementById("topupView").style.display = "block";
-}
+function showTopup() { hideAll(); document.getElementById("topupView").style.display = "block"; }
+function closeBuy() { showGame(currentBuyGameKey); }
 
 function showProfile() {
   hideAll();
@@ -49,6 +189,84 @@ function showProfile() {
   }
 }
 
+// ===== Open Game Detail =====
+let currentBuyGameKey = "";
+
+function openGame(key) {
+  currentBuyGameKey = key;
+  showGame(key);
+}
+
+function showGame(key) {
+  hideAll();
+  const game = ITEMS[key];
+  if (!game) return;
+  
+  document.getElementById("gameView").style.display = "block";
+  document.getElementById("gameHeaderImg").src = game.img;
+  document.getElementById("gameHeaderTitle").innerText = game.title;
+
+  const container = document.getElementById("gameItemsList");
+  container.innerHTML = "";
+
+  game.items.forEach(item => {
+    if (item.type === "head") {
+      const head = document.createElement("div");
+      head.className = "section-head";
+      head.innerText = item.text;
+      container.appendChild(head);
+    } else {
+      const btn = document.createElement("button");
+      btn.className = "item-btn";
+      btn.innerHTML = `${item.name}<b>${item.price.toLocaleString()} Ks</b>`;
+      btn.onclick = () => openBuy(game.title, item.name, item.price);
+      container.appendChild(btn);
+    }
+  });
+}
+
+// ===== Open Buy =====
+function openBuy(gameTitle, itemName, price) {
+  hideAll();
+  document.getElementById("buyView").style.display = "block";
+  document.getElementById("buyGame").innerText = gameTitle;
+  document.getElementById("buyItem").innerText = itemName;
+  document.getElementById("buyPrice").innerText = price.toLocaleString() + " Ks";
+  document.getElementById("buyGameId").value = "";
+  document.getElementById("buyServerId").value = "";
+  document.getElementById("buyNote").value = "";
+  currentBuy = { game: gameTitle, item: itemName, price: price };
+}
+
+async function confirmBuy() {
+  if (!currentBuy) return;
+  const gameId = document.getElementById("buyGameId").value.trim();
+  if (!gameId) return tg.showAlert(" ID ");
+  const serverId = document.getElementById("buyServerId").value.trim();
+  const note = document.getElementById("buyNote").value.trim();
+
+  try {
+    const res = await fetch(API_URL + "/api/buy", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        user_id: user.id,
+        user_name: userProfile?.name || user.first_name,
+        item: `${currentBuy.game} - ${currentBuy.item}`,
+        price: currentBuy.price,
+        game_id: gameId,
+        server_id: serverId,
+        note: note
+      })
+    });
+    const data = await res.json();
+    tg.showAlert(data.message);
+    showWallet();
+  } catch (e) {
+    tg.showAlert("Error — ");
+  }
+}
+
 // ===== Register =====
 async function registerUser() {
   const name = document.getElementById("regName").value.trim();
@@ -58,20 +276,14 @@ async function registerUser() {
 
   if (!name) return tg.showAlert(" ");
   if (!phone || phone.length < 7) return tg.showAlert("  ");
-  if (!pw || pw.length < 4) return tg.showAlert("    ");
+  if (!pw || pw.length < 4) return tg.showAlert("   ");
   if (pw !== cpw) return tg.showAlert("  ");
 
   try {
     const res = await fetch(API_URL + "/api/register", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        user_id: user.id,
-        first_name: user.first_name,
-        name: name,
-        phone: phone,
-        password: pw
-      })
+      body: JSON.stringify({ user_id: user.id, first_name: user.first_name, name, phone, password: pw })
     });
     const data = await res.json();
     if (data.success) {
@@ -83,16 +295,12 @@ async function registerUser() {
     } else {
       tg.showAlert(data.message || "Error");
     }
-  } catch (e) {
-    tg.showAlert("Error — ");
-  }
+  } catch (e) { tg.showAlert("Error — "); }
 }
 
-// ===== Login =====
 async function loginUser() {
   const name = document.getElementById("loginName").value.trim();
   const pw = document.getElementById("loginPassword").value;
-
   if (!name) return tg.showAlert(" ");
   if (!pw) return tg.showAlert(" ");
 
@@ -100,11 +308,7 @@ async function loginUser() {
     const res = await fetch(API_URL + "/api/login", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        user_id: user.id,
-        name: name,
-        password: pw
-      })
+      body: JSON.stringify({ user_id: user.id, name, password: pw })
     });
     const data = await res.json();
     if (data.success) {
@@ -116,12 +320,9 @@ async function loginUser() {
     } else {
       tg.showAlert(data.message || "    ");
     }
-  } catch (e) {
-    tg.showAlert("Error — ");
-  }
+  } catch (e) { tg.showAlert("Error — "); }
 }
 
-// ===== Logout =====
 function logoutUser() {
   tg.showConfirm(" ?", (ok) => {
     if (ok) {
@@ -132,10 +333,8 @@ function logoutUser() {
   });
 }
 
-// ===== Check User on Load =====
 async function checkUser() {
   const isLoggedIn = localStorage.getItem("logged_in");
-  
   try {
     const res = await fetch(API_URL + "/api/user_status", {
       method: "POST",
@@ -143,7 +342,6 @@ async function checkUser() {
       body: JSON.stringify({ user_id: user.id })
     });
     const data = await res.json();
-    
     if (data.registered) {
       userProfile = data.user;
       if (isLoggedIn === "yes") {
@@ -155,13 +353,9 @@ async function checkUser() {
     } else {
       showRegister();
     }
-  } catch (e) {
-    console.log(e);
-    showRegister();
-  }
+  } catch (e) { showRegister(); }
 }
 
-// ===== App Status =====
 async function checkAppStatus() {
   try {
     const res = await fetch(API_URL + "/api/status");
@@ -170,7 +364,6 @@ async function checkAppStatus() {
   } catch (e) { console.log(e); }
 }
 
-// ===== Balance =====
 async function loadBalance() {
   if (!user) return;
   try {
@@ -184,7 +377,6 @@ async function loadBalance() {
   } catch (e) { console.log(e); }
 }
 
-// ===== Payment =====
 function selectPay(method, btn) {
   selectedPay = method;
   document.querySelectorAll(".pay-btn").forEach(b => b.classList.remove("active"));
@@ -219,35 +411,11 @@ async function submitTopup() {
       const data = await res.json();
       tg.showAlert(data.message);
       showWallet();
-    } catch (err) {
-      tg.showAlert("Error — ");
-    }
+    } catch (err) { tg.showAlert("Error — "); }
   };
   reader.readAsDataURL(receiptFile);
 }
 
-// ===== Buy =====
-async function buyItem(item, price) {
-  if (!appOpen) return tg.showAlert("  ");
-  try {
-    const res = await fetch(API_URL + "/api/buy", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        user_id: user.id,
-        user_name: userProfile?.name || user.first_name,
-        item: item,
-        price: price
-      })
-    });
-    const data = await res.json();
-    tg.showAlert(data.message);
-  } catch (e) {
-    tg.showAlert("Error");
-  }
-}
-
-// ===== On Load =====
 window.onload = async () => {
   if (user) {
     await checkUser();

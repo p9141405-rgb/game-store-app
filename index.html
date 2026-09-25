@@ -23,23 +23,17 @@
       <h2 style="color:#2AABEE; margin-bottom: 4px;">SafeZone Store</h2>
       <p style="color:#8888aa; font-size:13px;">အကောင့်အသစ် ဖွင့်ပါ</p>
     </div>
-
     <div class="info-box" style="margin-top: 20px;">
       <p class="label" style="margin-top:0;">👤 သင့်အမည်</p>
       <input type="text" id="regName" placeholder="ဥပမာ — Pyae Phyo" class="input">
-
       <p class="label">📞 ဖုန်းနံပါတ်</p>
       <input type="tel" id="regPhone" placeholder="ဥပမာ — 09xxxxxxxxx" class="input">
-
-      <p class="label">🔒 စကားဝှက် (Password)</p>
+      <p class="label">🔒 စကားဝှက်</p>
       <input type="password" id="regPassword" placeholder="စကားဝှက် ထည့်ပါ" class="input">
-
       <p class="label">🔒 စကားဝှက် အတည်ပြုပါ</p>
       <input type="password" id="regConfirm" placeholder="စကားဝှက် ပြန်ထည့်ပါ" class="input">
     </div>
-
     <button class="submit-btn" onclick="registerUser()">✅ အကောင့်ဖွင့်မည်</button>
-
     <p style="text-align:center; color:#8888aa; font-size:13px; margin-top:20px;">
       အကောင့်ရှိပြီးသားလား?
       <span style="color:#2AABEE; cursor:pointer;" onclick="showLogin()">ဝင်ရောက်မည်</span>
@@ -53,24 +47,20 @@
       <h2 style="color:#2AABEE; margin-bottom: 4px;">SafeZone Store</h2>
       <p style="color:#8888aa; font-size:13px;">အကောင့်ဝင်ရောက်ပါ</p>
     </div>
-
     <div class="info-box" style="margin-top: 20px;">
       <p class="label" style="margin-top:0;">👤 အမည်</p>
       <input type="text" id="loginName" placeholder="သင့်အမည် ထည့်ပါ" class="input">
-
       <p class="label">🔒 စကားဝှက်</p>
       <input type="password" id="loginPassword" placeholder="စကားဝှက် ထည့်ပါ" class="input">
     </div>
-
     <button class="submit-btn" onclick="loginUser()">🔓 ဝင်ရောက်မည်</button>
-
     <p style="text-align:center; color:#8888aa; font-size:13px; margin-top:20px;">
       အကောင့်မရှိဘူးလား?
       <span style="color:#2AABEE; cursor:pointer;" onclick="showRegister()">အကောင့်ဖွင့်မည်</span>
     </p>
   </div>
 
-  <!-- Main View -->
+  <!-- Wallet / Games List View -->
   <div id="walletView" class="screen" style="display:none;">
     <div class="wallet-card">
       <div class="wallet-top">
@@ -89,37 +79,40 @@
 
     <h3 class="section-title">🎮 ဂိမ်းများ</h3>
     <div class="game-list">
-      <div class="game-card">
+      <div class="game-card" onclick="openGame('mlbb')">
         <img src="mlbb.png" class="game-img">
-        <div class="game-info"><h3>Mobile Legends</h3><p>Diamond ၈၆</p><span class="price">၅,၀၀၀ ကျပ်</span></div>
-        <button class="buy-btn" onclick="buyItem('Mobile Legends', 5000)">ဝယ်မည်</button>
+        <div class="game-info"><h3>Mobile Legends</h3><p>Diamond / Pass</p></div>
+        <span style="color:#2AABEE; font-size:20px;">›</span>
       </div>
-      <div class="game-card">
+      <div class="game-card" onclick="openGame('pubg')">
         <img src="pubg.png" class="game-img">
-        <div class="game-info"><h3>PUBG Mobile</h3><p>UC ၆၀</p><span class="price">၄,၅၀၀ ကျပ်</span></div>
-        <button class="buy-btn" onclick="buyItem('PUBG Mobile', 4500)">ဝယ်မည်</button>
+        <div class="game-info"><h3>PUBG Mobile</h3><p>UC / Packs</p></div>
+        <span style="color:#2AABEE; font-size:20px;">›</span>
       </div>
-      <div class="game-card">
-        <img src="coc.png" class="game-img">
-        <div class="game-info"><h3>Clash of Clans</h3><p>Gem ၅၀၀</p><span class="price">၅,၀၀၀ ကျပ်</span></div>
-        <button class="buy-btn" onclick="buyItem('Clash of Clans', 5000)">ဝယ်မည်</button>
-      </div>
-      <div class="game-card">
-        <img src="roblox.png" class="game-img">
-        <div class="game-info"><h3>Roblox</h3><p>Robux ၄၀၀</p><span class="price">၅,၀၀၀ ကျပ်</span></div>
-        <button class="buy-btn" onclick="buyItem('Roblox', 5000)">ဝယ်မည်</button>
-      </div>
-      <div class="game-card">
+      <div class="game-card" onclick="openGame('magic')">
         <img src="magic.png" class="game-img">
-        <div class="game-info"><h3>Magic Chess</h3><p>Diamond ၈၆</p><span class="price">၅,၀၀၀ ကျပ်</span></div>
-        <button class="buy-btn" onclick="buyItem('Magic Chess', 5000)">ဝယ်မည်</button>
+        <div class="game-info"><h3>Magic Chess Go Go</h3><p>Diamond / WP</p></div>
+        <span style="color:#2AABEE; font-size:20px;">›</span>
       </div>
-      <div class="game-card">
+      <div class="game-card" onclick="openGame('premium')">
         <img src="premium.png" class="game-img">
-        <div class="game-info"><h3>App Premium</h3><p>၁ လ</p><span class="price">၃,၀၀၀ ကျပ်</span></div>
-        <button class="buy-btn" onclick="buyItem('App Premium', 3000)">ဝယ်မည်</button>
+        <div class="game-info"><h3>App Premium</h3><p>Subscriptions</p></div>
+        <span style="color:#2AABEE; font-size:20px;">›</span>
       </div>
     </div>
+  </div>
+
+  <!-- Game Detail View -->
+  <div id="gameView" class="screen" style="display:none;">
+    <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+      <img id="gameHeaderImg" src="" class="game-img">
+      <h2 id="gameHeaderTitle" style="font-size:20px;"></h2>
+    </div>
+
+    <p class="label">📌 ငွေလွှဲပြီးမှ ဝယ်ယူပါ</p>
+
+    <div id="gameItemsList" class="item-grid"></div>
   </div>
 
   <!-- Profile View -->
@@ -139,7 +132,6 @@
   <div id="topupView" class="screen" style="display:none;">
     <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
     <h2 class="page-title">💰 ငွေဖြည့်မည်</h2>
-
     <p class="label">ငွေလွှဲမည့် နည်းလမ်း ရွေးပါ</p>
     <div class="pay-methods">
       <button class="pay-btn" onclick="selectPay('KBZ Pay', this)">KBZ Pay</button>
@@ -147,7 +139,6 @@
       <button class="pay-btn" onclick="selectPay('UAB Pay', this)">UAB Pay</button>
       <button class="pay-btn" onclick="selectPay('AYA Pay', this)">AYA Pay</button>
     </div>
-
     <div id="payInfo" style="display:none;">
       <div class="info-box">
         <p class="info-title">📌 ငွေလွှဲရမည့် အချက်အလက်</p>
@@ -155,15 +146,30 @@
         <p>👤 အမည်: <b>Pyae Phyo Kyaw</b></p>
         <p>🏦 နည်းလမ်း: <b id="selectedMethod">-</b></p>
       </div>
-
       <p class="label">ငွေလွှဲပမာဏ ထည့်ပါ</p>
       <input type="number" id="topupAmount" placeholder="ဥပမာ — 5000" class="input">
-
       <p class="label">ပြေစာ (Screenshot) တင်ပါ</p>
       <input type="file" id="receipt" accept="image/*" class="input">
-
       <button class="submit-btn" onclick="submitTopup()">✅ Submit</button>
     </div>
+  </div>
+
+  <!-- Buy Item View -->
+  <div id="buyView" class="screen" style="display:none;">
+    <button class="back-btn" onclick="closeBuy()">← နောက်သို့</button>
+    <h2 class="page-title">🛒 ဝယ်ယူမည်</h2>
+    <div class="info-box">
+      <p>🎮 ဂိမ်း: <b id="buyGame">-</b></p>
+      <p>📦 ပစ္စည်း: <b id="buyItem">-</b></p>
+      <p>💵 စျေး: <b id="buyPrice">-</b></p>
+    </div>
+    <p class="label">🆔 ဂိမ်း ID ထည့်ပါ</p>
+    <input type="text" id="buyGameId" placeholder="ဂိမ်း ID ထည့်ပါ" class="input">
+    <p class="label">🌐 Server ID (ရှိရင်)</p>
+    <input type="text" id="buyServerId" placeholder="Server ID" class="input">
+    <p class="label">📝 မှတ်ချက် (Optional)</p>
+    <input type="text" id="buyNote" placeholder="ဖြည့်စရာရှိရင်" class="input">
+    <button class="submit-btn" onclick="confirmBuy()">✅ အတည်ပြုမည်</button>
   </div>
 
   <script src="app.js"></script>
