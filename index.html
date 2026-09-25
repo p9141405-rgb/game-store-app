@@ -9,7 +9,6 @@
 </head>
 <body>
 
-  <!-- Main View -->
   <div id="walletView" class="screen">
     <div class="wallet-card">
       <div class="wallet-top">
@@ -61,16 +60,15 @@
     </div>
   </div>
 
-  <!-- MLBB ID Check View -->
   <div id="mlbbView" class="screen" style="display:none;">
     <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
     <h2 class="page-title">🎮 MLBB ID စစ်ဆေးခြင်း</h2>
 
     <p class="label">သင့် MLBB ID ထည့်ပါ</p>
-    <input type="number" id="mlbbId" placeholder="ဥပမာ — 123456789" class="input">
+    <input type="number" id="mlbbId" placeholder="ဥပမာ — 172676928" class="input">
 
     <p class="label">Server ID</p>
-    <input type="number" id="mlbbServer" placeholder="ဥပမာ — 2001" class="input">
+    <input type="number" id="mlbbServer" placeholder="ဥပမာ — 2884" class="input">
 
     <button class="submit-btn" onclick="checkMLBB()">🔍 စစ်ဆေးမည်</button>
 
@@ -80,11 +78,11 @@
         <p>👤 အမည်: <b id="resultName">-</b></p>
         <p>🆔 ID: <b id="resultId">-</b></p>
         <p>🌐 Server: <b id="resultServer">-</b></p>
+        <p>🌏 Region: <b id="resultRegion">-</b></p>
       </div>
     </div>
   </div>
 
-  <!-- Topup View -->
   <div id="topupView" class="screen" style="display:none;">
     <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
     <h2 class="page-title">💰 ငွေဖြည့်မည်</h2>

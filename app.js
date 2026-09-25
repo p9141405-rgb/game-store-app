@@ -28,24 +28,36 @@ function showMLBB() {
   document.getElementById("mlbbResult").style.display = "none";
 }
 
-function checkMLBB() {
-  const mlbbId = document.getElementById("mlbbId").value;
-  const server = document.getElementById("mlbbServer").value;
-  
-  if (!mlbbId || mlbbId.length < 5) {
-    return tg.showAlert("MLBB ID မှန်ကန်စွာ ထည့်ပါ");
+async function checkMLBB() {
+  const mlbbId = document.getElementById("mlbbId").value.trim();
+  const server = document.getElementById("mlbbServer").value.trim();
+
+  if (!mlbbId || mlbbId.length < 5) return tg.showAlert("MLBB ID  ");
+  if (!server || server.length < 3) return tg.showAlert("Server ID  ");
+
+  tg.showAlert(" ...\n");
+
+  try {
+    const res = await fetch(API_URL + "/api/check_mlbb", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ uid: mlbbId, server: server })
+    });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById("resultName").innerText = data.name;
+      document.getElementById("resultId").innerText = data.uid;
+      document.getElementById("resultServer").innerText = data.server;
+      document.getElementById("resultRegion").innerText = data.region || "Unknown";
+      document.getElementById("mlbbResult").style.display = "block";
+      tg.showAlert("  !");
+    } else {
+      tg.showAlert(" " + (data.message || " "));
+    }
+  } catch (e) {
+    console.error(e);
+    tg.showAlert("  \n ");
   }
-  
-  if (!server || server.length < 4) {
-    return tg.showAlert("Server ID မှန်ကန်စွာ ထည့်ပါ");
-  }
-  
-  document.getElementById("resultName").innerText = "Player_" + mlbbId.slice(-4);
-  document.getElementById("resultId").innerText = mlbbId;
-  document.getElementById("resultServer").innerText = server;
-  document.getElementById("mlbbResult").style.display = "block";
-  
-  tg.showAlert("✅ ID အတည်ပြုပြီး");
 }
 
 async function checkAppStatus() {
@@ -53,9 +65,7 @@ async function checkAppStatus() {
     const res = await fetch(API_URL + "/api/status");
     const data = await res.json();
     appOpen = data.app_open;
-    if (!appOpen) {
-      tg.showAlert("❌ ဝယ်ယူမှု ပိတ်ထားပါသည်");
-    }
+    if (!appOpen) tg.showAlert("  ");
   } catch (e) { console.log(e); }
 }
 
@@ -81,12 +91,12 @@ function selectPay(method, btn) {
 }
 
 async function submitTopup() {
-  if (!selectedPay) return tg.showAlert("ငွေလွှဲနည်းလမ်း ရွေးပါ");
+  if (!selectedPay) return tg.showAlert(" ");
   const amount = document.getElementById("topupAmount").value;
-  if (!amount || amount < 1000) return tg.showAlert("အနည်းဆုံး ၁,၀၀၀ ကျပ်");
+  if (!amount || amount < 1000) return tg.showAlert(" , ");
 
   const receiptFile = document.getElementById("receipt").files[0];
-  if (!receiptFile) return tg.showAlert("ပြေစာ တင်ပါ");
+  if (!receiptFile) return tg.showAlert(" ");
 
   const reader = new FileReader();
   reader.onload = async function(e) {
@@ -106,38 +116,31 @@ async function submitTopup() {
       const data = await res.json();
       tg.showAlert(data.message);
       showWallet();
-    } catch (err) {
-      tg.showAlert("Error — ပြန်စမ်းပါ");
-    }
+    } catch (err) { tg.showAlert("Error � "); }
   };
   reader.readAsDataURL(receiptFile);
 }
 
 async function buyItem(item, price) {
-  if (!appOpen) return tg.showAlert("❌ ဝယ်ယူမှု ပိတ်ထားပါသည်");
+  if (!appOpen) return tg.showAlert("  ");
   try {
     const res = await fetch(API_URL + "/api/buy", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
-        user_id: user.id,
-        user_name: user.first_name,
-        item: item,
-        price: price
+        user_id: user.id, user_name: user.first_name,
+        item: item, price: price
       })
     });
     const data = await res.json();
     tg.showAlert(data.message);
-  } catch (e) {
-    tg.showAlert("Error");
-  }
+  } catch (e) { tg.showAlert("Error"); }
 }
 
 window.onload = async () => {
   if (user) {
     document.getElementById("userName").innerText = user.first_name;
     loadBalance();
-    
     try {
       const res = await fetch(API_URL + "/api/status");
       const data = await res.json();
@@ -145,12 +148,11 @@ window.onload = async () => {
         document.body.innerHTML = `
           <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f0f1a;color:#fff;text-align:center;padding:24px;font-family:sans-serif;">
             <div>
-              <h1 style="font-size:64px;margin-bottom:16px;">🔒</h1>
-              <h2 style="color:#2AABEE;margin-bottom:12px;">Mini App ပိတ်ထားပါသည်</h2>
-              <p style="color:#8888aa;">Admin မှ ပြန်ဖွင့်သည်အထိ စောင့်ပါ</p>
+              <h1 style="font-size:64px;margin-bottom:16px;"></h1>
+              <h2 style="color:#2AABEE;margin-bottom:12px;">Mini App </h2>
+              <p style="color:#8888aa;">Admin   </p>
             </div>
-          </div>
-        `;
+          </div>`;
       }
     } catch (e) { console.log(e); }
   }
