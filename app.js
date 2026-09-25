@@ -8,7 +8,7 @@ let appOpen = true;
 let userProfile = null;
 let currentBalance = 0;
 
-// ⭐ သင့် URL
+// ⭐ သင့် URL — ဒီနေရာမှာ ထည့်ပြီးသား
 const API_URL = "https://highlighted-configure-mayor-sociology.trycloudflare.com";
 const ADMIN_USERNAME = "pyae_phyo_12327";
 
@@ -247,7 +247,6 @@ function logoutUser() {
   });
 }
 
-// ⭐ App Status စစ်ဆေးခြင်း
 async function checkAppStatus() {
   try {
     const res = await fetch(API_URL + "/api/status");
