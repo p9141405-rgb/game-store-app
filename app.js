@@ -7,16 +7,24 @@ let selectedPay = "";
 let appOpen = true;
 let userProfile = null;
 
-//   URL 
 const API_URL = "https://highlighted-configure-mayor-sociology.trycloudflare.com";
 
 // ===== Screen Management =====
 function hideAll() {
-  document.getElementById("loadingView").style.display = "none";
-  document.getElementById("registerView").style.display = "none";
-  document.getElementById("walletView").style.display = "none";
-  document.getElementById("topupView").style.display = "none";
-  document.getElementById("profileView").style.display = "none";
+  ["loadingView", "registerView", "loginView", "walletView", "topupView", "profileView"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "none";
+  });
+}
+
+function showRegister() {
+  hideAll();
+  document.getElementById("registerView").style.display = "block";
+}
+
+function showLogin() {
+  hideAll();
+  document.getElementById("loginView").style.display = "block";
 }
 
 function showWallet() {
@@ -36,20 +44,22 @@ function showProfile() {
   if (userProfile) {
     document.getElementById("pName").innerText = userProfile.name || "-";
     document.getElementById("pPhone").innerText = userProfile.phone || "-";
-    document.getElementById("pGameId").innerText = userProfile.game_id || "-";
     document.getElementById("pUserId").innerText = userProfile.user_id || "-";
     document.getElementById("pCreated").innerText = userProfile.created || "-";
   }
 }
 
-// ===== Register User =====
+// ===== Register =====
 async function registerUser() {
   const name = document.getElementById("regName").value.trim();
   const phone = document.getElementById("regPhone").value.trim();
-  const gameId = document.getElementById("regGameId").value.trim();
+  const pw = document.getElementById("regPassword").value;
+  const cpw = document.getElementById("regConfirm").value;
 
   if (!name) return tg.showAlert(" ");
   if (!phone || phone.length < 7) return tg.showAlert("  ");
+  if (!pw || pw.length < 4) return tg.showAlert("    ");
+  if (pw !== cpw) return tg.showAlert("  ");
 
   try {
     const res = await fetch(API_URL + "/api/register", {
@@ -60,13 +70,15 @@ async function registerUser() {
         first_name: user.first_name,
         name: name,
         phone: phone,
-        game_id: gameId
+        password: pw
       })
     });
     const data = await res.json();
     if (data.success) {
+      localStorage.setItem("logged_in", "yes");
       tg.showAlert(" !");
       userProfile = data.user;
+      document.getElementById("userName").innerText = data.user.name;
       showWallet();
     } else {
       tg.showAlert(data.message || "Error");
@@ -76,8 +88,54 @@ async function registerUser() {
   }
 }
 
-// ===== Check User Status =====
+// ===== Login =====
+async function loginUser() {
+  const name = document.getElementById("loginName").value.trim();
+  const pw = document.getElementById("loginPassword").value;
+
+  if (!name) return tg.showAlert(" ");
+  if (!pw) return tg.showAlert(" ");
+
+  try {
+    const res = await fetch(API_URL + "/api/login", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        user_id: user.id,
+        name: name,
+        password: pw
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      localStorage.setItem("logged_in", "yes");
+      tg.showAlert(" !");
+      userProfile = data.user;
+      document.getElementById("userName").innerText = data.user.name;
+      showWallet();
+    } else {
+      tg.showAlert(data.message || "    ");
+    }
+  } catch (e) {
+    tg.showAlert("Error — ");
+  }
+}
+
+// ===== Logout =====
+function logoutUser() {
+  tg.showConfirm(" ?", (ok) => {
+    if (ok) {
+      localStorage.removeItem("logged_in");
+      userProfile = null;
+      showLogin();
+    }
+  });
+}
+
+// ===== Check User on Load =====
 async function checkUser() {
+  const isLoggedIn = localStorage.getItem("logged_in");
+  
   try {
     const res = await fetch(API_URL + "/api/user_status", {
       method: "POST",
@@ -88,16 +146,18 @@ async function checkUser() {
     
     if (data.registered) {
       userProfile = data.user;
-      document.getElementById("userName").innerText = data.user.name || user.first_name;
-      showWallet();
+      if (isLoggedIn === "yes") {
+        document.getElementById("userName").innerText = data.user.name;
+        showWallet();
+      } else {
+        showLogin();
+      }
     } else {
-      hideAll();
-      document.getElementById("registerView").style.display = "block";
+      showRegister();
     }
   } catch (e) {
     console.log(e);
-    hideAll();
-    document.getElementById("registerView").style.display = "block";
+    showRegister();
   }
 }
 
@@ -107,9 +167,6 @@ async function checkAppStatus() {
     const res = await fetch(API_URL + "/api/status");
     const data = await res.json();
     appOpen = data.app_open;
-    if (!appOpen) {
-      tg.showAlert("  ");
-    }
   } catch (e) { console.log(e); }
 }
 

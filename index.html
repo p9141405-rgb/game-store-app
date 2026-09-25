@@ -16,12 +16,12 @@
     <p style="color:#8888aa;">Loading...</p>
   </div>
 
-  <!-- ⭐ Register View -->
+  <!-- Register View -->
   <div id="registerView" class="screen" style="display:none;">
     <div style="text-align:center; padding: 20px 0;">
       <h1 style="font-size:48px; margin-bottom: 8px;">🎮</h1>
       <h2 style="color:#2AABEE; margin-bottom: 4px;">SafeZone Store</h2>
-      <p style="color:#8888aa; font-size:13px;">အကောင့်ဖွင့်ပြီး ဝယ်ယူပါ</p>
+      <p style="color:#8888aa; font-size:13px;">အကောင့်အသစ် ဖွင့်ပါ</p>
     </div>
 
     <div class="info-box" style="margin-top: 20px;">
@@ -31,14 +31,42 @@
       <p class="label">📞 ဖုန်းနံပါတ်</p>
       <input type="tel" id="regPhone" placeholder="ဥပမာ — 09xxxxxxxxx" class="input">
 
-      <p class="label">🎮 ဂိမ်း ID (ရှိရင် ထည့်ပါ)</p>
-      <input type="text" id="regGameId" placeholder="ဥပမာ — MLBB ID" class="input">
+      <p class="label">🔒 စကားဝှက် (Password)</p>
+      <input type="password" id="regPassword" placeholder="စကားဝှက် ထည့်ပါ" class="input">
+
+      <p class="label">🔒 စကားဝှက် အတည်ပြုပါ</p>
+      <input type="password" id="regConfirm" placeholder="စကားဝှက် ပြန်ထည့်ပါ" class="input">
     </div>
 
     <button class="submit-btn" onclick="registerUser()">✅ အကောင့်ဖွင့်မည်</button>
 
-    <p style="text-align:center; color:#8888aa; font-size:12px; margin-top:20px;">
-      အကောင့်ဖွင့်ပြီးရင် ငွေဖြည့်ပြီး ဂိမ်းများ ဝယ်ယူနိုင်ပါပြီ
+    <p style="text-align:center; color:#8888aa; font-size:13px; margin-top:20px;">
+      အကောင့်ရှိပြီးသားလား?
+      <span style="color:#2AABEE; cursor:pointer;" onclick="showLogin()">ဝင်ရောက်မည်</span>
+    </p>
+  </div>
+
+  <!-- Login View -->
+  <div id="loginView" class="screen" style="display:none;">
+    <div style="text-align:center; padding: 20px 0;">
+      <h1 style="font-size:48px; margin-bottom: 8px;">🎮</h1>
+      <h2 style="color:#2AABEE; margin-bottom: 4px;">SafeZone Store</h2>
+      <p style="color:#8888aa; font-size:13px;">အကောင့်ဝင်ရောက်ပါ</p>
+    </div>
+
+    <div class="info-box" style="margin-top: 20px;">
+      <p class="label" style="margin-top:0;">👤 အမည်</p>
+      <input type="text" id="loginName" placeholder="သင့်အမည် ထည့်ပါ" class="input">
+
+      <p class="label">🔒 စကားဝှက်</p>
+      <input type="password" id="loginPassword" placeholder="စကားဝှက် ထည့်ပါ" class="input">
+    </div>
+
+    <button class="submit-btn" onclick="loginUser()">🔓 ဝင်ရောက်မည်</button>
+
+    <p style="text-align:center; color:#8888aa; font-size:13px; margin-top:20px;">
+      အကောင့်မရှိဘူးလား?
+      <span style="color:#2AABEE; cursor:pointer;" onclick="showRegister()">အကောင့်ဖွင့်မည်</span>
     </p>
   </div>
 
@@ -101,10 +129,10 @@
     <div class="info-box">
       <p>👤 အမည်: <b id="pName">-</b></p>
       <p>📞 ဖုန်း: <b id="pPhone">-</b></p>
-      <p>🎮 ဂိမ်း ID: <b id="pGameId">-</b></p>
       <p>🆔 Telegram ID: <b id="pUserId">-</b></p>
       <p>📅 အကောင့်ဖွင့်ချိန်: <b id="pCreated">-</b></p>
     </div>
+    <button class="submit-btn" onclick="logoutUser()" style="background:#c0392b; margin-top:20px;">🚪 အကောင့်မှ ထွက်မည်</button>
   </div>
 
   <!-- Topup View -->
