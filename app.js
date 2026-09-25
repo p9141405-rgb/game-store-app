@@ -5,9 +5,9 @@ tg.expand();
 const user = tg.initDataUnsafe?.user;
 let selectedPay = "";
 
-// ⚠️ ဒီနေရာမှာ Termux Session ၂ က URL ကို ထည့်ပါ
-const API_URL = "https://infinite-promoted-suit-restore.trycloudflare.com";
+const API_URL = "https://marvel-truly-ranging-survive.trycloudflare.com";
 
+// ===== Screens =====
 function showWallet() {
   document.getElementById("walletView").style.display = "block";
   document.getElementById("topupView").style.display = "none";
@@ -27,6 +27,7 @@ function showGames() {
   document.getElementById("gamesView").style.display = "block";
 }
 
+// ===== Balance =====
 async function loadBalance() {
   if (!user) return;
   try {
@@ -40,6 +41,7 @@ async function loadBalance() {
   } catch (e) { console.log("Balance error", e); }
 }
 
+// ===== Payment Method =====
 function selectPay(method, btn) {
   selectedPay = method;
   document.querySelectorAll(".pay-btn").forEach(b => b.classList.remove("active"));
@@ -84,6 +86,7 @@ async function submitTopup() {
   reader.readAsDataURL(receiptFile);
 }
 
+// ===== Buy =====
 async function buyItem(item, price) {
   try {
     const res = await fetch(API_URL + "/api/buy", {
