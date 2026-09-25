@@ -176,3 +176,28 @@ body {
   cursor: pointer;
 }
 .pay-btn.active { border-color: #2AABEE; background: linear-gradient(135deg, #2AABEE, #7B2FF7); }
+
+/* ⭐ Toast Notification — အပေါ်ကနေ ကျလာမည် */
+.toast-box {
+  position: fixed;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 280px;
+  max-width: 90%;
+  padding: 16px 20px;
+  border-radius: 14px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  z-index: 99999;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  pointer-events: none;
+}
+.toast-box.show { top: 30px; opacity: 1; }
+.toast-box.success { background: linear-gradient(135deg, #00b894, #00cec9); }
+.toast-box.error { background: linear-gradient(135deg, #d63031, #e17055); }
+.toast-box.info { background: linear-gradient(135deg, #2AABEE, #7B2FF7); }

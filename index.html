@@ -144,7 +144,6 @@
     </div>
   </div>
 
-  <!-- Buy View -->
   <div id="buyView" class="screen" style="display:none;">
     <button class="back-btn" onclick="closeBuy()">← နောက်သို့</button>
     <h2 class="page-title">🛒 ဝယ်ယူမည်</h2>
@@ -173,7 +172,6 @@
     <button class="submit-btn" onclick="confirmBuy()">✅ ဝယ်ယူမည် (ငွေဖြတ်မည်)</button>
   </div>
 
-  <!-- ⭐ Success View — Admin ဆီ ပို့ရန် -->
   <div id="successView" class="screen" style="display:none;">
     <div style="text-align:center; padding: 20px 0;">
       <h1 style="font-size:64px; margin-bottom: 8px;">✅</h1>
@@ -193,13 +191,16 @@
     <div id="adminContactBox" style="margin-top: 20px;">
       <div class="info-box" style="background: linear-gradient(135deg, #2AABEE22, #7B2FF722); border-color: #2AABEE; text-align: center;">
         <p style="color:#fff; font-size:14px; margin-bottom:12px;">📨 အော်ဒါ ရယူရန် Admin ဆီ ဆက်သွယ်ပါ</p>
-        <p style="color:#FFD700; font-size:18px; font-weight:bold; margin-bottom:16px;">@pyae_phyo_123</p>
+        <p style="color:#FFD700; font-size:18px; font-weight:bold; margin-bottom:16px;">@pyae_phyo_12327</p>
         <button class="submit-btn" onclick="openAdminChat()" style="background: linear-gradient(135deg, #0088cc, #2AABEE); margin-top:0;">💬 Admin ဆီ စာပို့မည်</button>
       </div>
     </div>
 
     <button class="back-btn" onclick="showWallet()" style="width:100%; margin-top:20px; padding:14px;">← Wallet သို့ ပြန်သွားမည်</button>
   </div>
+
+  <!-- ⭐ Toast Notification -->
+  <div id="toastBox" class="toast-box"></div>
 
   <script src="app.js"></script>
 </body>

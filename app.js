@@ -8,15 +8,22 @@ let appOpen = true;
 let userProfile = null;
 let currentBalance = 0;
 
+//  Termux URL —   
 const API_URL = "https://highlighted-configure-mayor-sociology.trycloudflare.com";
-const ADMIN_USERNAME = "pyae_phyo_123";
+const ADMIN_USERNAME = "pyae_phyo_12327";
+
+//  Toast Notification
+function showToast(message, type = "info") {
+  const box = document.getElementById("toastBox");
+  box.className = "toast-box " + type;
+  box.innerText = message;
+  setTimeout(() => box.classList.add("show"), 10);
+  setTimeout(() => { box.classList.remove("show"); }, 3000);
+}
 
 const ITEMS = {
   mlbb: {
-    title: "Mobile Legends",
-    img: "mlbb.png",
-    needServer: true,
-    needId: true,
+    title: "Mobile Legends", img: "mlbb.png", needServer: true, needId: true,
     items: [
       { type: "head", text: " Weekly Pass / Pass" },
       { name: "Weekly Pass", price: 6650 },
@@ -39,7 +46,7 @@ const ITEMS = {
       { name: "Diamond 3688", price: 213000 },
       { name: "Diamond 5532", price: 319500 },
       { name: "Diamond 9288", price: 530000 },
-      { type: "head", text: " Double 2X (ID + Server )" },
+      { type: "head", text: " Double 2X" },
       { name: "50+50", price: 4000 },
       { name: "150+150", price: 12500 },
       { name: "250+250", price: 17500 },
@@ -47,10 +54,7 @@ const ITEMS = {
     ]
   },
   pubg: {
-    title: "PUBG Mobile",
-    img: "pubg.png",
-    needServer: false,
-    needId: true,
+    title: "PUBG Mobile", img: "pubg.png", needServer: false, needId: true,
     items: [
       { type: "head", text: " UC" },
       { name: "UC 60", price: 4700 },
@@ -87,13 +91,10 @@ const ITEMS = {
     ]
   },
   magic: {
-    title: "Magic Chess Go Go",
-    img: "magic.png",
-    needServer: true,
-    needId: true,
+    title: "Magic Chess Go Go", img: "magic.png", needServer: true, needId: true,
     items: [
       { name: "Weekly Pass (WP)", price: 8500 },
-      { type: "head", text: " Double 2X ()" },
+      { type: "head", text: " Double 2X" },
       { name: "50+50", price: 4000 },
       { name: "150+150", price: 11000 },
       { name: "250+250", price: 18500 },
@@ -114,10 +115,7 @@ const ITEMS = {
     ]
   },
   premium: {
-    title: "App Premium",
-    img: "premium.png",
-    needServer: false,
-    needId: false,
+    title: "App Premium", img: "premium.png", needServer: false, needId: false,
     items: [
       { name: " Tg SMS Free", price: 8000 },
       { type: "head", text: " Telegram Premium" },
@@ -197,7 +195,6 @@ function showGame(key) {
   });
 }
 
-//  Buy View — ID 
 async function openBuy(key, gameTitle, itemName, price) {
   hideAll();
   document.getElementById("buyView").style.display = "block";
@@ -212,7 +209,6 @@ async function openBuy(key, gameTitle, itemName, price) {
   document.getElementById("buyBalance").innerText = currentBalance.toLocaleString() + " Ks";
   
   const gameData = ITEMS[key];
-  
   if (!gameData.needId) {
     document.getElementById("gameIdBlock").style.display = "none";
     document.getElementById("serverIdBlock").style.display = "none";
@@ -229,7 +225,7 @@ async function openBuy(key, gameTitle, itemName, price) {
   currentBuy = { key, game: gameTitle, item: itemName, price: price };
 }
 
-//  Popup   
+//  Popup  — Toast  
 async function confirmBuy() {
   if (!currentBuy) return;
   
@@ -239,18 +235,18 @@ async function confirmBuy() {
   
   if (gameData.needId) {
     gameId = document.getElementById("buyGameId").value.trim();
-    if (!gameId) return tg.showAlert("  ID ");
+    if (!gameId) return showToast("  ID ", "error");
     
     if (gameData.needServer) {
       serverId = document.getElementById("buyServerId").value.trim();
-      if (!serverId) return tg.showAlert(" Server ID ");
+      if (!serverId) return showToast(" Server ID ", "error");
     }
   }
   
   const note = document.getElementById("buyNote").value.trim();
   
   if (currentBalance < currentBuy.price) {
-    return tg.showAlert("  \n\n : " + currentBuy.price.toLocaleString() + " Ks\n : " + currentBalance.toLocaleString() + " Ks");
+    return showToast("  ", "error");
   }
   
   try {
@@ -273,16 +269,16 @@ async function confirmBuy() {
     const data = await res.json();
     
     if (data.success) {
-      showSuccess(data.new_balance);
+      showToast("  ", "success");
+      setTimeout(() => showSuccess(data.new_balance), 1000);
     } else {
-      tg.showAlert(data.message || " Error");
+      showToast(data.message || " Error", "error");
     }
   } catch (e) {
-    tg.showAlert(" Error — ");
+    showToast(" Error — ", "error");
   }
 }
 
-//  Success View
 function showSuccess(newBalance) {
   hideAll();
   document.getElementById("successView").style.display = "block";
@@ -294,12 +290,9 @@ function showSuccess(newBalance) {
     year: 'numeric', month: '2-digit', day: '2-digit',
     hour: '2-digit', minute: '2-digit'
   });
-  
-  const box = document.getElementById("adminContactBox");
-  box.style.display = "block";
+  document.getElementById("adminContactBox").style.display = "block";
 }
 
-//  Admin   
 function openAdminChat() {
   const msg = encodeURIComponent(
     ` Admin \n\n` +
@@ -313,16 +306,15 @@ function openAdminChat() {
   tg.openTelegramLink(url);
 }
 
-// ===== Register / Login =====
 async function registerUser() {
   const name = document.getElementById("regName").value.trim();
   const phone = document.getElementById("regPhone").value.trim();
   const pw = document.getElementById("regPassword").value;
   const cpw = document.getElementById("regConfirm").value;
-  if (!name) return tg.showAlert(" ");
-  if (!phone || phone.length < 7) return tg.showAlert("  ");
-  if (!pw || pw.length < 4) return tg.showAlert("   ");
-  if (pw !== cpw) return tg.showAlert("  ");
+  if (!name) return showToast(" ", "error");
+  if (!phone || phone.length < 7) return showToast("  ", "error");
+  if (!pw || pw.length < 4) return showToast("   ", "error");
+  if (pw !== cpw) return showToast("  ", "error");
   try {
     const res = await fetch(API_URL + "/api/register", {
       method: "POST",
@@ -332,21 +324,21 @@ async function registerUser() {
     const data = await res.json();
     if (data.success) {
       localStorage.setItem("logged_in", "yes");
-      tg.showAlert(" !");
+      showToast(" !", "success");
       userProfile = data.user;
       document.getElementById("userName").innerText = data.user.name;
-      showWallet();
+      setTimeout(() => showWallet(), 1000);
     } else {
-      tg.showAlert(data.message || "Error");
+      showToast(data.message || "Error", "error");
     }
-  } catch (e) { tg.showAlert("Error — "); }
+  } catch (e) { showToast("Error — ", "error"); }
 }
 
 async function loginUser() {
   const name = document.getElementById("loginName").value.trim();
   const pw = document.getElementById("loginPassword").value;
-  if (!name) return tg.showAlert(" ");
-  if (!pw) return tg.showAlert(" ");
+  if (!name) return showToast(" ", "error");
+  if (!pw) return showToast(" ", "error");
   try {
     const res = await fetch(API_URL + "/api/login", {
       method: "POST",
@@ -356,14 +348,14 @@ async function loginUser() {
     const data = await res.json();
     if (data.success) {
       localStorage.setItem("logged_in", "yes");
-      tg.showAlert(" !");
+      showToast(" !", "success");
       userProfile = data.user;
       document.getElementById("userName").innerText = data.user.name;
-      showWallet();
+      setTimeout(() => showWallet(), 1000);
     } else {
-      tg.showAlert(data.message || "    ");
+      showToast(data.message || "    ", "error");
     }
-  } catch (e) { tg.showAlert("Error — "); }
+  } catch (e) { showToast("Error — ", "error"); }
 }
 
 function logoutUser() {
@@ -431,11 +423,11 @@ function selectPay(method, btn) {
 }
 
 async function submitTopup() {
-  if (!selectedPay) return tg.showAlert(" ");
+  if (!selectedPay) return showToast(" ", "error");
   const amount = document.getElementById("topupAmount").value;
-  if (!amount || amount < 1000) return tg.showAlert(" , ");
+  if (!amount || amount < 1000) return showToast(" , ", "error");
   const receiptFile = document.getElementById("receipt").files[0];
-  if (!receiptFile) return tg.showAlert(" ");
+  if (!receiptFile) return showToast(" ", "error");
   const reader = new FileReader();
   reader.onload = async function(e) {
     const receiptB64 = e.target.result.split(",")[1];
@@ -452,9 +444,9 @@ async function submitTopup() {
         })
       });
       const data = await res.json();
-      tg.showAlert(data.message);
-      showWallet();
-    } catch (err) { tg.showAlert("Error — "); }
+      showToast(data.message, "success");
+      setTimeout(() => showWallet(), 1000);
+    } catch (err) { showToast("Error — ", "error"); }
   };
   reader.readAsDataURL(receiptFile);
 }
