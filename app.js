@@ -6,8 +6,10 @@ const user = tg.initDataUnsafe?.user;
 let selectedPay = "";
 let appOpen = true;
 
+//   URL  
 const API_URL = "https://innovation-removed-spiritual-previously.trycloudflare.com";
 
+// ===== Screens =====
 function showWallet() {
   document.getElementById("walletView").style.display = "block";
   document.getElementById("topupView").style.display = "none";
@@ -28,47 +30,73 @@ function showMLBB() {
   document.getElementById("mlbbResult").style.display = "none";
 }
 
+// ===== MLBB ID  =====
 async function checkMLBB() {
   const mlbbId = document.getElementById("mlbbId").value.trim();
   const server = document.getElementById("mlbbServer").value.trim();
-
-  if (!mlbbId || mlbbId.length < 5) return tg.showAlert("MLBB ID  ");
-  if (!server || server.length < 3) return tg.showAlert("Server ID  ");
-
-  tg.showAlert(" ...\n");
-
+  
+  if (!mlbbId || mlbbId.length < 5) {
+    return tg.showAlert("MLBB ID   ( — 123456789)");
+  }
+  
+  if (!server || server.length < 4) {
+    return tg.showAlert("Server ID   ( — 12345)");
+  }
+  
+  tg.showAlert(" ...");
+  
   try {
     const res = await fetch(API_URL + "/api/check_mlbb", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({ uid: mlbbId, server: server })
     });
+    
     const data = await res.json();
+    console.log("MLBB Result:", data);
+    
     if (data.success) {
       document.getElementById("resultName").innerText = data.name;
-      document.getElementById("resultId").innerText = data.uid;
-      document.getElementById("resultServer").innerText = data.server;
-      document.getElementById("resultRegion").innerText = data.region || "Unknown";
+      document.getElementById("resultId").innerText = mlbbId;
+      document.getElementById("resultServer").innerText = server;
+      document.getElementById("resultRegion").innerText = " " + data.region;
       document.getElementById("mlbbResult").style.display = "block";
-      tg.showAlert("  !");
+      
+      if (data.source === "Demo") {
+        tg.showAlert(" Result \n(Demo Data — API )");
+      } else {
+        tg.showAlert("  !");
+      }
     } else {
-      tg.showAlert(" " + (data.message || " "));
+      tg.showAlert(data.message || "  ");
     }
-  } catch (e) {
-    console.error(e);
-    tg.showAlert("  \n ");
+  } catch (err) {
+    console.error(err);
+    tg.showAlert(" Error — ");
   }
 }
 
+function copyResult() {
+  const text = document.getElementById("resultName").innerText + " | " +
+               document.getElementById("resultId").innerText + " (" +
+               document.getElementById("resultServer").innerText + ")";
+  navigator.clipboard.writeText(text);
+  tg.showAlert(" Copy ");
+}
+
+// ===== App Status  =====
 async function checkAppStatus() {
   try {
     const res = await fetch(API_URL + "/api/status");
     const data = await res.json();
     appOpen = data.app_open;
-    if (!appOpen) tg.showAlert("  ");
+    if (!appOpen) {
+      tg.showAlert("  ");
+    }
   } catch (e) { console.log(e); }
 }
 
+// ===== Balance  =====
 async function loadBalance() {
   if (!user) return;
   try {
@@ -82,6 +110,7 @@ async function loadBalance() {
   } catch (e) { console.log(e); }
 }
 
+// =====   =====
 function selectPay(method, btn) {
   selectedPay = method;
   document.querySelectorAll(".pay-btn").forEach(b => b.classList.remove("active"));
@@ -90,6 +119,7 @@ function selectPay(method, btn) {
   document.getElementById("selectedMethod").innerText = method;
 }
 
+// =====  Submit  =====
 async function submitTopup() {
   if (!selectedPay) return tg.showAlert(" ");
   const amount = document.getElementById("topupAmount").value;
@@ -116,11 +146,14 @@ async function submitTopup() {
       const data = await res.json();
       tg.showAlert(data.message);
       showWallet();
-    } catch (err) { tg.showAlert("Error — "); }
+    } catch (err) {
+      tg.showAlert("Error — ");
+    }
   };
   reader.readAsDataURL(receiptFile);
 }
 
+// =====  =====
 async function buyItem(item, price) {
   if (!appOpen) return tg.showAlert("  ");
   try {
@@ -128,19 +161,25 @@ async function buyItem(item, price) {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
-        user_id: user.id, user_name: user.first_name,
-        item: item, price: price
+        user_id: user.id,
+        user_name: user.first_name,
+        item: item,
+        price: price
       })
     });
     const data = await res.json();
     tg.showAlert(data.message);
-  } catch (e) { tg.showAlert("Error"); }
+  } catch (e) {
+    tg.showAlert("Error");
+  }
 }
 
+// ===== On Load =====
 window.onload = async () => {
   if (user) {
     document.getElementById("userName").innerText = user.first_name;
     loadBalance();
+    
     try {
       const res = await fetch(API_URL + "/api/status");
       const data = await res.json();
@@ -152,7 +191,8 @@ window.onload = async () => {
               <h2 style="color:#2AABEE;margin-bottom:12px;">Mini App </h2>
               <p style="color:#8888aa;">Admin   </p>
             </div>
-          </div>`;
+          </div>
+        `;
       }
     } catch (e) { console.log(e); }
   }
