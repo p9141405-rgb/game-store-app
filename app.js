@@ -8,7 +8,7 @@ let appOpen = true;
 let userProfile = null;
 let currentBalance = 0;
 
-// ⭐ သင့် URL အသစ် ထည့်ပြီးသား
+// ⭐ သင့် URL
 const API_URL = "https://highlighted-configure-mayor-sociology.trycloudflare.com";
 const ADMIN_USERNAME = "pyae_phyo_12327";
 
@@ -173,7 +173,6 @@ function openAdminChat() {
   tg.openTelegramLink(`https://t.me/${ADMIN_USERNAME}`);
 }
 
-// ⭐ Register
 async function registerUser() {
   const name = document.getElementById("regName").value.trim();
   const phone = document.getElementById("regPhone").value.trim();
@@ -199,7 +198,6 @@ async function registerUser() {
       })
     });
     const data = await res.json();
-    console.log("Register Response:", data);
     
     if (data.success) {
       localStorage.setItem("logged_in", "yes");
@@ -211,12 +209,10 @@ async function registerUser() {
       showToast(data.message || "❌ Error", "error");
     }
   } catch (e) {
-    console.error("Register Error:", e);
     showToast("Error: " + e.message, "error");
   }
 }
 
-// ⭐ Login
 async function loginUser() {
   const name = document.getElementById("loginName").value.trim();
   const pw = document.getElementById("loginPassword").value;
@@ -251,6 +247,27 @@ function logoutUser() {
   });
 }
 
+// ⭐ App Status စစ်ဆေးခြင်း
+async function checkAppStatus() {
+  try {
+    const res = await fetch(API_URL + "/api/status");
+    const data = await res.json();
+    appOpen = data.app_open;
+    if (!appOpen) {
+      document.body.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f0f1a;color:#fff;text-align:center;padding:24px;font-family:sans-serif;">
+          <div>
+            <h1 style="font-size:64px;margin-bottom:16px;">🔒</h1>
+            <h2 style="color:#2AABEE;margin-bottom:12px;">Mini App ပိတ်ထားပါသည်</h2>
+            <p style="color:#8888aa;margin-bottom:20px;">Admin မှ ပြန်ဖွင့်သည်အထိ စောင့်ပါ</p>
+            <button onclick="location.reload()" style="padding:12px 24px;background:#2AABEE;color:#fff;border:none;border-radius:10px;font-size:14px;">🔄 ပြန်စစ်မည်</button>
+          </div>
+        </div>
+      `;
+    }
+  } catch (e) { console.log(e); }
+}
+
 async function checkUser() {
   const isLoggedIn = localStorage.getItem("logged_in");
   try {
@@ -272,14 +289,6 @@ async function checkUser() {
       showRegister();
     }
   } catch (e) { showRegister(); }
-}
-
-async function checkAppStatus() {
-  try {
-    const res = await fetch(API_URL + "/api/status");
-    const data = await res.json();
-    appOpen = data.app_open;
-  } catch (e) { console.log(e); }
 }
 
 async function loadBalance() {
@@ -336,8 +345,8 @@ async function submitTopup() {
 
 window.onload = async () => {
   if (user) {
+    await checkAppStatus();
     await checkUser();
-    checkAppStatus();
   } else {
     hideAll();
     document.getElementById("registerView").style.display = "block";
