@@ -8,7 +8,7 @@ let appOpen = true;
 let userProfile = null;
 let currentBalance = 0;
 
-// ⭐ သင့် URL — ဒီနေရာမှာ ထည့်ပြီးသား
+// ⭐ သင့် URL ကို ဒီနေရာမှာ ထည့်ပါ (လက်ရှိ Termux URL နဲ့ တူရပါမယ်)
 const API_URL = "https://highlighted-configure-mayor-sociology.trycloudflare.com";
 const ADMIN_USERNAME = "pyae_phyo_12327";
 
