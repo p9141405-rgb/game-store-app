@@ -6,14 +6,18 @@ const user = tg.initDataUnsafe?.user;
 let selectedPay = "";
 let appOpen = true;
 let userProfile = null;
+let currentBalance = 0;
 
+//   URL  
 const API_URL = "https://highlighted-configure-mayor-sociology.trycloudflare.com";
+const ADMIN_USERNAME = "pyae_phyo_123";
 
-// ===== ITEMS DATA =====
 const ITEMS = {
   mlbb: {
     title: "Mobile Legends",
     img: "mlbb.png",
+    needServer: true,
+    needId: true,
     items: [
       { type: "head", text: " Weekly Pass / Pass" },
       { name: "Weekly Pass", price: 6650 },
@@ -46,6 +50,8 @@ const ITEMS = {
   pubg: {
     title: "PUBG Mobile",
     img: "pubg.png",
+    needServer: false,
+    needId: true,
     items: [
       { type: "head", text: " UC" },
       { name: "UC 60", price: 4700 },
@@ -84,6 +90,8 @@ const ITEMS = {
   magic: {
     title: "Magic Chess Go Go",
     img: "magic.png",
+    needServer: true,
+    needId: true,
     items: [
       { name: "Weekly Pass (WP)", price: 8500 },
       { type: "head", text: " Double 2X ()" },
@@ -109,6 +117,8 @@ const ITEMS = {
   premium: {
     title: "App Premium",
     img: "premium.png",
+    needServer: false,
+    needId: false,
     items: [
       { name: " Tg SMS Free", price: 8000 },
       { type: "head", text: " Telegram Premium" },
@@ -137,9 +147,8 @@ const ITEMS = {
 let currentBuy = null;
 let currentBuyGameKey = "";
 
-// ===== Screen Management =====
 function hideAll() {
-  ["loadingView", "registerView", "loginView", "walletView", "gameView", "topupView", "profileView", "buyView"].forEach(id => {
+  ["loadingView", "registerView", "loginView", "walletView", "gameView", "topupView", "profileView", "buyView", "successView"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = "none";
   });
@@ -147,13 +156,7 @@ function hideAll() {
 
 function showRegister() { hideAll(); document.getElementById("registerView").style.display = "block"; }
 function showLogin() { hideAll(); document.getElementById("loginView").style.display = "block"; }
-
-function showWallet() {
-  hideAll();
-  document.getElementById("walletView").style.display = "block";
-  loadBalance();
-}
-
+function showWallet() { hideAll(); document.getElementById("walletView").style.display = "block"; loadBalance(); }
 function showTopup() { hideAll(); document.getElementById("topupView").style.display = "block"; }
 function closeBuy() { showGame(currentBuyGameKey); }
 
@@ -168,11 +171,7 @@ function showProfile() {
   }
 }
 
-// ===== Open Game Detail =====
-function openGame(key) {
-  currentBuyGameKey = key;
-  showGame(key);
-}
+function openGame(key) { currentBuyGameKey = key; showGame(key); }
 
 function showGame(key) {
   hideAll();
@@ -193,14 +192,14 @@ function showGame(key) {
       const btn = document.createElement("button");
       btn.className = "item-btn";
       btn.innerHTML = `${item.name}<b>${item.price.toLocaleString()} Ks</b>`;
-      btn.onclick = () => openBuy(game.title, item.name, item.price);
+      btn.onclick = () => openBuy(key, game.title, item.name, item.price);
       container.appendChild(btn);
     }
   });
 }
 
-// ===== Open Buy =====
-function openBuy(gameTitle, itemName, price) {
+//  Buy View — ID 
+async function openBuy(key, gameTitle, itemName, price) {
   hideAll();
   document.getElementById("buyView").style.display = "block";
   document.getElementById("buyGame").innerText = gameTitle;
@@ -209,33 +208,133 @@ function openBuy(gameTitle, itemName, price) {
   document.getElementById("buyGameId").value = "";
   document.getElementById("buyServerId").value = "";
   document.getElementById("buyNote").value = "";
-  currentBuy = { game: gameTitle, item: itemName, price: price };
+  
+  await loadBalance();
+  document.getElementById("buyBalance").innerText = currentBalance.toLocaleString() + " Ks";
+  
+  const gameData = ITEMS[key];
+  
+  if (!gameData.needId) {
+    // App Premium — ID 
+    document.getElementById("gameIdBlock").style.display = "none";
+    document.getElementById("serverIdBlock").style.display = "none";
+  } else if (gameData.needServer) {
+    // MLBB / Magic Chess
+    document.getElementById("gameIdBlock").style.display = "block";
+    document.getElementById("serverIdBlock").style.display = "block";
+    document.getElementById("buyGameIdLabel").innerText = "  ID ";
+  } else {
+    // PUBG
+    document.getElementById("gameIdBlock").style.display = "block";
+    document.getElementById("serverIdBlock").style.display = "none";
+    document.getElementById("buyGameIdLabel").innerText = "  ID ";
+  }
+  
+  currentBuy = { key, game: gameTitle, item: itemName, price: price };
 }
 
 async function confirmBuy() {
   if (!currentBuy) return;
-  const gameId = document.getElementById("buyGameId").value.trim();
-  if (!gameId) return tg.showAlert(" ID ");
-  const serverId = document.getElementById("buyServerId").value.trim();
+  
+  let gameId = "N/A";
+  let serverId = "";
+  const gameData = ITEMS[currentBuy.key];
+  
+  if (gameData.needId) {
+    gameId = document.getElementById("buyGameId").value.trim();
+    if (!gameId) return tg.showAlert("  ID ");
+    
+    if (gameData.needServer) {
+      serverId = document.getElementById("buyServerId").value.trim();
+      if (!serverId) return tg.showAlert(" Server ID ");
+    }
+  }
+  
   const note = document.getElementById("buyNote").value.trim();
-  try {
-    const res = await fetch(API_URL + "/api/buy", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        user_id: user.id,
-        user_name: userProfile?.name || user.first_name,
-        item: `${currentBuy.game} - ${currentBuy.item}`,
-        price: currentBuy.price,
-        game_id: gameId,
-        server_id: serverId,
-        note: note
-      })
-    });
-    const data = await res.json();
-    tg.showAlert(data.message);
-    showWallet();
-  } catch (e) { tg.showAlert("Error — "); }
+  
+  if (currentBalance < currentBuy.price) {
+    return tg.showAlert(
+      "  \n\n" +
+      " : " + currentBuy.price.toLocaleString() + " Ks\n" +
+      " : " + currentBalance.toLocaleString() + " Ks"
+    );
+  }
+  
+  let confirmMsg = `  \n\n`;
+  confirmMsg += ` ${currentBuy.game}\n`;
+  confirmMsg += ` ${currentBuy.item}\n`;
+  confirmMsg += ` ${currentBuy.price.toLocaleString()} Ks\n`;
+  if (gameId !== "N/A") confirmMsg += ` ${gameId}\n`;
+  if (serverId) confirmMsg += ` ${serverId}\n`;
+  confirmMsg += `\n : ${currentBalance.toLocaleString()} Ks\n`;
+  confirmMsg += ` : ${currentBuy.price.toLocaleString()} Ks\n`;
+  confirmMsg += ` : ${(currentBalance - currentBuy.price).toLocaleString()} Ks`;
+  
+  tg.showConfirm(confirmMsg, async (ok) => {
+    if (!ok) return;
+    try {
+      const res = await fetch(API_URL + "/api/buy", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          user_id: user.id,
+          user_name: userProfile?.name || user.first_name,
+          user_phone: userProfile?.phone || "",
+          user_username: user.username || "",
+          game: currentBuy.game,
+          item: currentBuy.item,
+          price: currentBuy.price,
+          game_id: gameId,
+          server_id: serverId,
+          note: note
+        })
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        showSuccess(data.new_balance);
+      } else {
+        tg.showAlert(data.message || " Error");
+      }
+    } catch (e) {
+      tg.showAlert(" Error — ");
+    }
+  });
+}
+
+//  Success View
+function showSuccess(newBalance) {
+  hideAll();
+  document.getElementById("successView").style.display = "block";
+  document.getElementById("successGame").innerText = currentBuy.game;
+  document.getElementById("successItem").innerText = currentBuy.item;
+  document.getElementById("successPrice").innerText = currentBuy.price.toLocaleString() + " Ks";
+  document.getElementById("successBalance").innerText = newBalance.toLocaleString() + " Ks";
+  document.getElementById("successTime").innerText = new Date().toLocaleString('en-GB', {
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit'
+  });
+  
+  const box = document.getElementById("adminContactBox");
+  if (currentBuy.key === "premium") {
+    box.style.display = "block";
+  } else {
+    box.style.display = "block";
+  }
+}
+
+//  Admin   
+function openAdminChat() {
+  const msg = encodeURIComponent(
+    ` Admin \n\n` +
+    ` ${userProfile?.name || user.first_name} \n` +
+    ` : ${currentBuy.game}\n` +
+    ` : ${currentBuy.item}\n` +
+    ` : ${currentBuy.price.toLocaleString()} Ks\n\n` +
+    ` `
+  );
+  const url = `https://t.me/${ADMIN_USERNAME}?text=${msg}`;
+  tg.openTelegramLink(url);
 }
 
 // ===== Register / Login =====
@@ -301,7 +400,6 @@ function logoutUser() {
   });
 }
 
-// ===== Check User =====
 async function checkUser() {
   const isLoggedIn = localStorage.getItem("logged_in");
   try {
@@ -325,7 +423,6 @@ async function checkUser() {
   } catch (e) { showRegister(); }
 }
 
-// ===== App Status / Balance / Topup =====
 async function checkAppStatus() {
   try {
     const res = await fetch(API_URL + "/api/status");
@@ -343,7 +440,9 @@ async function loadBalance() {
       body: JSON.stringify({ user_id: user.id })
     });
     const data = await res.json();
+    currentBalance = data.balance;
     document.getElementById("balance").innerText = data.balance.toLocaleString();
+    return data.balance;
   } catch (e) { console.log(e); }
 }
 
@@ -384,7 +483,6 @@ async function submitTopup() {
   reader.readAsDataURL(receiptFile);
 }
 
-// ===== On Load =====
 window.onload = async () => {
   if (user) {
     await checkUser();

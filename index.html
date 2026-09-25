@@ -9,14 +9,12 @@
 </head>
 <body>
 
-  <!-- Loading -->
   <div id="loadingView" class="screen" style="text-align:center; padding-top: 100px;">
     <h1 style="font-size:48px;">🎮</h1>
     <h2 style="color:#2AABEE;">SafeZone Store</h2>
     <p style="color:#8888aa;">Loading...</p>
   </div>
 
-  <!-- Register View -->
   <div id="registerView" class="screen" style="display:none;">
     <div style="text-align:center; padding: 20px 0;">
       <h1 style="font-size:48px; margin-bottom: 8px;">🎮</h1>
@@ -40,7 +38,6 @@
     </p>
   </div>
 
-  <!-- Login View -->
   <div id="loginView" class="screen" style="display:none;">
     <div style="text-align:center; padding: 20px 0;">
       <h1 style="font-size:48px; margin-bottom: 8px;">🎮</h1>
@@ -60,7 +57,6 @@
     </p>
   </div>
 
-  <!-- Wallet View -->
   <div id="walletView" class="screen" style="display:none;">
     <div class="wallet-card">
       <div class="wallet-top">
@@ -102,7 +98,6 @@
     </div>
   </div>
 
-  <!-- Game Detail View -->
   <div id="gameView" class="screen" style="display:none;">
     <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
@@ -112,7 +107,6 @@
     <div id="gameItemsList" class="item-grid"></div>
   </div>
 
-  <!-- Profile View -->
   <div id="profileView" class="screen" style="display:none;">
     <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
     <h2 class="page-title">👤 ကျွန်ုပ်၏ Profile</h2>
@@ -125,7 +119,6 @@
     <button class="submit-btn" onclick="logoutUser()" style="background:#c0392b; margin-top:20px;">🚪 အကောင့်မှ ထွက်မည်</button>
   </div>
 
-  <!-- Topup View -->
   <div id="topupView" class="screen" style="display:none;">
     <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
     <h2 class="page-title">💰 ငွေဖြည့်မည်</h2>
@@ -151,7 +144,7 @@
     </div>
   </div>
 
-  <!-- Buy Item View -->
+  <!-- Buy View -->
   <div id="buyView" class="screen" style="display:none;">
     <button class="back-btn" onclick="closeBuy()">← နောက်သို့</button>
     <h2 class="page-title">🛒 ဝယ်ယူမည်</h2>
@@ -159,14 +152,53 @@
       <p>🎮 ဂိမ်း: <b id="buyGame">-</b></p>
       <p>📦 ပစ္စည်း: <b id="buyItem">-</b></p>
       <p>💵 စျေး: <b id="buyPrice">-</b></p>
+      <p>💰 လက်ကျန်: <b id="buyBalance">-</b></p>
     </div>
-    <p class="label">🆔 ဂိမ်း ID ထည့်ပါ</p>
-    <input type="text" id="buyGameId" placeholder="ဂိမ်း ID ထည့်ပါ" class="input">
-    <p class="label">🌐 Server ID (ရှိရင်)</p>
-    <input type="text" id="buyServerId" placeholder="Server ID" class="input">
-    <p class="label">📝 မှတ်ချက် (Optional)</p>
-    <input type="text" id="buyNote" placeholder="ဖြည့်စရာရှိရင်" class="input">
-    <button class="submit-btn" onclick="confirmBuy()">✅ အတည်ပြုမည်</button>
+
+    <div id="gameIdBlock" style="display:none;">
+      <p class="label" id="buyGameIdLabel">🆔 ဂိမ်း ID ထည့်ပါ</p>
+      <input type="text" id="buyGameId" placeholder="ဂိမ်း ID ထည့်ပါ" class="input">
+    </div>
+
+    <div id="serverIdBlock" style="display:none;">
+      <p class="label">🌐 Server ID ထည့်ပါ</p>
+      <input type="text" id="buyServerId" placeholder="Server ID" class="input">
+    </div>
+
+    <div id="noteBlock">
+      <p class="label">📝 မှတ်ချက် (Optional)</p>
+      <input type="text" id="buyNote" placeholder="ဖြည့်စရာရှိရင်" class="input">
+    </div>
+
+    <button class="submit-btn" onclick="confirmBuy()">✅ ဝယ်ယူမည် (ငွေဖြတ်မည်)</button>
+  </div>
+
+  <!-- ⭐ Success View — Admin ဆီ ပို့ရန် -->
+  <div id="successView" class="screen" style="display:none;">
+    <div style="text-align:center; padding: 20px 0;">
+      <h1 style="font-size:64px; margin-bottom: 8px;">✅</h1>
+      <h2 style="color:#2AABEE; margin-bottom: 8px;">ဝယ်ယူမှု အောင်မြင်ပါသည်!</h2>
+      <p style="color:#8888aa; font-size:14px;">Admin မှ ပို့ဆောင်ပေးပါမည်</p>
+    </div>
+
+    <div class="info-box" style="border-color:#2AABEE; margin-top: 20px;">
+      <p class="info-title">📋 အော်ဒါ အချက်အလက်</p>
+      <p>🎮 ဂိမ်း: <b id="successGame">-</b></p>
+      <p>📦 ပစ္စည်း: <b id="successItem">-</b></p>
+      <p>💵 ဖြတ်လိုက်သည်: <b id="successPrice">-</b></p>
+      <p>💰 ကျန်ငွေ: <b id="successBalance">-</b></p>
+      <p>🕐 အချိန်: <b id="successTime">-</b></p>
+    </div>
+
+    <div id="adminContactBox" style="margin-top: 20px;">
+      <div class="info-box" style="background: linear-gradient(135deg, #2AABEE22, #7B2FF722); border-color: #2AABEE; text-align: center;">
+        <p style="color:#fff; font-size:14px; margin-bottom:12px;">📨 အော်ဒါ ရယူရန် Admin ဆီ ဆက်သွယ်ပါ</p>
+        <p style="color:#FFD700; font-size:18px; font-weight:bold; margin-bottom:16px;">@pyae_phyo_123</p>
+        <button class="submit-btn" onclick="openAdminChat()" style="background: linear-gradient(135deg, #0088cc, #2AABEE); margin-top:0;">💬 Admin ဆီ စာပို့မည်</button>
+      </div>
+    </div>
+
+    <button class="back-btn" onclick="showWallet()" style="width:100%; margin-top:20px; padding:14px;">← Wallet သို့ ပြန်သွားမည်</button>
   </div>
 
   <script src="app.js"></script>
