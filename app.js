@@ -36,6 +36,10 @@ function checkMLBB() {
     return tg.showAlert("MLBB ID မှန်ကန်စွာ ထည့်ပါ");
   }
   
+  if (!server || server.length < 4) {
+    return tg.showAlert("Server ID မှန်ကန်စွာ ထည့်ပါ");
+  }
+  
   document.getElementById("resultName").innerText = "Player_" + mlbbId.slice(-4);
   document.getElementById("resultId").innerText = mlbbId;
   document.getElementById("resultServer").innerText = server;
