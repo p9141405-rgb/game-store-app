@@ -9,7 +9,7 @@ let userProfile = null;
 let currentBalance = 0;
 
 // ⭐ သင့် URL အသစ် ထည့်ပြီးသား
-const API_URL = "https://aruba-ser-tamil-fabrics.trycloudflare.com";
+const API_URL = "https://highlighted-configure-mayor-sociology.trycloudflare.com";
 const ADMIN_USERNAME = "pyae_phyo_12327";
 
 function showToast(message, type = "info") {
