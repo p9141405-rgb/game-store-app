@@ -214,16 +214,13 @@ async function openBuy(key, gameTitle, itemName, price) {
   const gameData = ITEMS[key];
   
   if (!gameData.needId) {
-    // App Premium — ID 
     document.getElementById("gameIdBlock").style.display = "none";
     document.getElementById("serverIdBlock").style.display = "none";
   } else if (gameData.needServer) {
-    // MLBB / Magic Chess
     document.getElementById("gameIdBlock").style.display = "block";
     document.getElementById("serverIdBlock").style.display = "block";
     document.getElementById("buyGameIdLabel").innerText = "  ID ";
   } else {
-    // PUBG
     document.getElementById("gameIdBlock").style.display = "block";
     document.getElementById("serverIdBlock").style.display = "none";
     document.getElementById("buyGameIdLabel").innerText = "  ID ";
@@ -232,6 +229,7 @@ async function openBuy(key, gameTitle, itemName, price) {
   currentBuy = { key, game: gameTitle, item: itemName, price: price };
 }
 
+//  Popup   
 async function confirmBuy() {
   if (!currentBuy) return;
   
@@ -252,15 +250,8 @@ async function confirmBuy() {
   const note = document.getElementById("buyNote").value.trim();
   
   if (currentBalance < currentBuy.price) {
-    return tg.showAlert(
-      "  \n\n" +
-      " : " + currentBuy.price.toLocaleString() + " Ks\n" +
-      " : " + currentBalance.toLocaleString() + " Ks"
-    );
+    return tg.showAlert("  \n\n : " + currentBuy.price.toLocaleString() + " Ks\n : " + currentBalance.toLocaleString() + " Ks");
   }
-  
-  //  Popup   
-  tg.showAlert(" ...");
   
   try {
     const res = await fetch(API_URL + "/api/buy", {
