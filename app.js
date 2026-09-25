@@ -11,21 +11,37 @@ const API_URL = "https://innovation-removed-spiritual-previously.trycloudflare.c
 function showWallet() {
   document.getElementById("walletView").style.display = "block";
   document.getElementById("topupView").style.display = "none";
-  document.getElementById("gamesView").style.display = "none";
+  document.getElementById("mlbbView").style.display = "none";
   loadBalance();
 }
 
 function showTopup() {
   document.getElementById("walletView").style.display = "none";
   document.getElementById("topupView").style.display = "block";
-  document.getElementById("gamesView").style.display = "none";
+  document.getElementById("mlbbView").style.display = "none";
 }
 
-function showGames() {
+function showMLBB() {
   document.getElementById("walletView").style.display = "none";
   document.getElementById("topupView").style.display = "none";
-  document.getElementById("gamesView").style.display = "block";
-  checkAppStatus();
+  document.getElementById("mlbbView").style.display = "block";
+  document.getElementById("mlbbResult").style.display = "none";
+}
+
+function checkMLBB() {
+  const mlbbId = document.getElementById("mlbbId").value;
+  const server = document.getElementById("mlbbServer").value;
+  
+  if (!mlbbId || mlbbId.length < 5) {
+    return tg.showAlert("MLBB ID မှန်ကန်စွာ ထည့်ပါ");
+  }
+  
+  document.getElementById("resultName").innerText = "Player_" + mlbbId.slice(-4);
+  document.getElementById("resultId").innerText = mlbbId;
+  document.getElementById("resultServer").innerText = server;
+  document.getElementById("mlbbResult").style.display = "block";
+  
+  tg.showAlert("✅ ID အတည်ပြုပြီး");
 }
 
 async function checkAppStatus() {

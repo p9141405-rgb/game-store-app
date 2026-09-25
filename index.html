@@ -9,7 +9,10 @@
 </head>
 <body>
 
+  <!-- Main View -->
   <div id="walletView" class="screen">
+
+    <!-- Wallet Card -->
     <div class="wallet-card">
       <div class="wallet-top">
         <span>💰 ကျွန်ုပ်၏ Wallet</span>
@@ -21,44 +24,12 @@
       </div>
       <div class="wallet-actions">
         <button onclick="showTopup()">➕ ငွေဖြည့်</button>
-        <button onclick="showGames()">🎮 ဂိမ်းဝယ်</button>
+        <button onclick="showMLBB()">🎮 MLBB ID စစ်</button>
       </div>
     </div>
-  </div>
 
-  <div id="topupView" class="screen" style="display:none;">
-    <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
-    <h2 class="page-title">💰 ငွေဖြည့်မည်</h2>
-
-    <p class="label">ငွေလွှဲမည့် နည်းလမ်း ရွေးပါ</p>
-    <div class="pay-methods">
-      <button class="pay-btn" onclick="selectPay('KBZ Pay', this)">KBZ Pay</button>
-      <button class="pay-btn" onclick="selectPay('Wave Money', this)">Wave Money</button>
-      <button class="pay-btn" onclick="selectPay('UAB Pay', this)">UAB Pay</button>
-      <button class="pay-btn" onclick="selectPay('AYA Pay', this)">AYA Pay</button>
-    </div>
-
-    <div id="payInfo" style="display:none;">
-      <div class="info-box">
-        <p class="info-title">📌 ငွေလွှဲရမည့် အချက်အလက်</p>
-        <p>📞 ဖုန်းနံပါတ်: <b>09763442881</b></p>
-        <p>👤 အမည်: <b>Pyae Phyo Kyaw</b></p>
-        <p>🏦 နည်းလမ်း: <b id="selectedMethod">-</b></p>
-      </div>
-
-      <p class="label">ငွေလွှဲပမာဏ ထည့်ပါ</p>
-      <input type="number" id="topupAmount" placeholder="ဥပမာ — 5000" class="input">
-
-      <p class="label">ပြေစာ (Screenshot) တင်ပါ</p>
-      <input type="file" id="receipt" accept="image/*" class="input">
-
-      <button class="submit-btn" onclick="submitTopup()">✅ Submit</button>
-    </div>
-  </div>
-
-  <div id="gamesView" class="screen" style="display:none;">
-    <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
-    <h2 class="page-title">🎮 ဂိမ်းများ</h2>
+    <!-- ⭐ ဂိမ်းစာရင်း — Wallet အောက် လွတ်နေတဲ့နေရာမှာ တိုက်ရိုက်ပေါ် -->
+    <h3 class="section-title">🎮 ဂိမ်းများ</h3>
     <div class="game-list">
       <div class="game-card">
         <img src="mlbb.png" class="game-img">
@@ -90,6 +61,72 @@
         <div class="game-info"><h3>App Premium</h3><p>၁ လ</p><span class="price">၃,၀၀၀ ကျပ်</span></div>
         <button class="buy-btn" onclick="buyItem('App Premium', 3000)">ဝယ်မည်</button>
       </div>
+    </div>
+
+  </div>
+
+  <!-- MLBB ID Check View -->
+  <div id="mlbbView" class="screen" style="display:none;">
+    <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
+    <h2 class="page-title">🎮 MLBB ID စစ်ဆေးခြင်း</h2>
+
+    <p class="label">သင့် MLBB ID ထည့်ပါ</p>
+    <input type="number" id="mlbbId" placeholder="ဥပမာ — 123456789" class="input">
+
+    <p class="label">Server ID</p>
+    <select id="mlbbServer" class="input">
+      <option value="2001">2001</option>
+      <option value="2002">2002</option>
+      <option value="2003">2003</option>
+      <option value="2004">2004</option>
+      <option value="2005">2005</option>
+      <option value="2006">2006</option>
+      <option value="2007">2007</option>
+      <option value="2008">2008</option>
+      <option value="2009">2009</option>
+      <option value="2010">2010</option>
+    </select>
+
+    <button class="submit-btn" onclick="checkMLBB()">🔍 စစ်ဆေးမည်</button>
+
+    <div id="mlbbResult" style="display:none; margin-top: 16px;">
+      <div class="info-box">
+        <p class="info-title">✅ ID အတည်ပြုပြီး</p>
+        <p>👤 အမည်: <b id="resultName">-</b></p>
+        <p>🆔 ID: <b id="resultId">-</b></p>
+        <p>🌐 Server: <b id="resultServer">-</b></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Topup View -->
+  <div id="topupView" class="screen" style="display:none;">
+    <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
+    <h2 class="page-title">💰 ငွေဖြည့်မည်</h2>
+
+    <p class="label">ငွေလွှဲမည့် နည်းလမ်း ရွေးပါ</p>
+    <div class="pay-methods">
+      <button class="pay-btn" onclick="selectPay('KBZ Pay', this)">KBZ Pay</button>
+      <button class="pay-btn" onclick="selectPay('Wave Money', this)">Wave Money</button>
+      <button class="pay-btn" onclick="selectPay('UAB Pay', this)">UAB Pay</button>
+      <button class="pay-btn" onclick="selectPay('AYA Pay', this)">AYA Pay</button>
+    </div>
+
+    <div id="payInfo" style="display:none;">
+      <div class="info-box">
+        <p class="info-title">📌 ငွေလွှဲရမည့် အချက်အလက်</p>
+        <p>📞 ဖုန်းနံပါတ်: <b>09763442881</b></p>
+        <p>👤 အမည်: <b>Pyae Phyo Kyaw</b></p>
+        <p>🏦 နည်းလမ်း: <b id="selectedMethod">-</b></p>
+      </div>
+
+      <p class="label">ငွေလွှဲပမာဏ ထည့်ပါ</p>
+      <input type="number" id="topupAmount" placeholder="ဥပမာ — 5000" class="input">
+
+      <p class="label">ပြေစာ (Screenshot) တင်ပါ</p>
+      <input type="file" id="receipt" accept="image/*" class="input">
+
+      <button class="submit-btn" onclick="submitTopup()">✅ Submit</button>
     </div>
   </div>
 
