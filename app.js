@@ -18,7 +18,6 @@ const ITEMS = {
       { type: "head", text: " Weekly Pass / Pass" },
       { name: "Weekly Pass", price: 6650 },
       { name: "Miya Twilight Pass", price: 35000 },
-
       { type: "head", text: " Diamonds" },
       { name: "Diamond 86", price: 5500 },
       { name: "Diamond 172", price: 11500 },
@@ -37,7 +36,6 @@ const ITEMS = {
       { name: "Diamond 3688", price: 213000 },
       { name: "Diamond 5532", price: 319500 },
       { name: "Diamond 9288", price: 530000 },
-
       { type: "head", text: " Double 2X (ID + Server )" },
       { name: "50+50", price: 4000 },
       { name: "150+150", price: 12500 },
@@ -59,28 +57,23 @@ const ITEMS = {
       { name: "UC 1800", price: 114000 },
       { name: "UC 3850", price: 226000 },
       { name: "UC 8100", price: 440000 },
-
       { type: "head", text: " Growth Pack" },
       { name: "First Purchase", price: 5950 },
       { name: "Firearm Materials", price: 14000 },
       { name: "Mythic Emblem Pack", price: 22750 },
-
       { type: "head", text: " Elite Pass" },
       { name: "Elite Pass Lv1-50", price: 26000 },
       { name: "Elite Pass Lv1-100", price: 52000 },
       { name: "Elite Pass Plus Lv1-100", price: 112500 },
-
       { type: "head", text: " Weekly Deal Pack" },
       { name: "Weekly Mythic Emblem", price: 17000 },
       { name: "Weekly Deal Pack 1", price: 6000 },
       { name: "Weekly Deal Pack 2", price: 14500 },
-
       { type: "head", text: " Prime (Normal)" },
       { name: "Prime 1 Month", price: 6000 },
       { name: "Prime 3 Month", price: 15000 },
       { name: "Prime 6 Month", price: 27000 },
       { name: "Prime 12 Month", price: 51000 },
-
       { type: "head", text: " Prime (Plus)" },
       { name: "Prime+ 1 Month", price: 46000 },
       { name: "Prime+ 3 Month", price: 126000 },
@@ -93,13 +86,11 @@ const ITEMS = {
     img: "magic.png",
     items: [
       { name: "Weekly Pass (WP)", price: 8500 },
-
       { type: "head", text: " Double 2X ()" },
       { name: "50+50", price: 4000 },
       { name: "150+150", price: 11000 },
       { name: "250+250", price: 18500 },
       { name: "500+500", price: 35700 },
-
       { type: "head", text: " Diamonds" },
       { name: "Diamond 86", price: 6000 },
       { name: "Diamond 172", price: 11900 },
@@ -119,44 +110,32 @@ const ITEMS = {
     title: "App Premium",
     img: "premium.png",
     items: [
-      { type: "head", text: " Tg SMS Free" },
-      { name: "Tg SMS Free", price: 8000 },
-
+      { name: " Tg SMS Free", price: 8000 },
       { type: "head", text: " Telegram Premium" },
       { name: "1 Month Login", price: 19500 },
       { name: "3 Month", price: 59000 },
       { name: "6 Month", price: 7700 },
       { name: "12 Month", price: 135000 },
-
-      { type: "head", text: " Subscription (Mail & PW)" },
-      { name: "1 Year", price: 5000 },
-
-      { type: "head", text: " Mobile Subscription" },
+      { type: "head", text: " Alight Motion" },
+      { name: "1 Year [Mail & PW ]", price: 5000 },
+      { type: "head", text: " Capcut Pro" },
       { name: "1 Month", price: 8500 },
       { name: "1 Month (PC)", price: 1800 },
+      { type: "head", text: " Canva" },
       { name: "Lifetime", price: 65000 },
-
       { type: "head", text: " ChatGPT Plus Official" },
       { name: "1 Month (Share)", price: 28000 },
       { name: "1 Month (Private)", price: 103000 },
-
-      { type: "head", text: " Family Plan" },
-      { name: "1 Month Family", price: 13000 },
-      { name: "3 Month Family", price: 21000 },
-      { name: "18 Month Family (Own)", price: 385000 },
-
-      { type: "head", text: " App Subscription" },
-      { name: "1 Month", price: 5000 },
-      { name: "1 Month (Premium)", price: 15500 },
-      { name: "1 Month (Basic)", price: 9000 },
-      { name: "1 Year", price: 42000 },
-      { name: "1 Month (Plus)", price: 6000 },
-      { name: "1 Month (Red)", price: 14000 }
+      { type: "head", text: " Gemini" },
+      { name: "1 Month (Family Plan)", price: 13000 },
+      { name: "3 Month (Family Plan)", price: 21000 },
+      { name: "18 Month (Own Mail & PW)", price: 385000 }
     ]
   }
 };
 
 let currentBuy = null;
+let currentBuyGameKey = "";
 
 // ===== Screen Management =====
 function hideAll() {
@@ -190,8 +169,6 @@ function showProfile() {
 }
 
 // ===== Open Game Detail =====
-let currentBuyGameKey = "";
-
 function openGame(key) {
   currentBuyGameKey = key;
   showGame(key);
@@ -201,14 +178,11 @@ function showGame(key) {
   hideAll();
   const game = ITEMS[key];
   if (!game) return;
-  
   document.getElementById("gameView").style.display = "block";
   document.getElementById("gameHeaderImg").src = game.img;
   document.getElementById("gameHeaderTitle").innerText = game.title;
-
   const container = document.getElementById("gameItemsList");
   container.innerHTML = "";
-
   game.items.forEach(item => {
     if (item.type === "head") {
       const head = document.createElement("div");
@@ -244,7 +218,6 @@ async function confirmBuy() {
   if (!gameId) return tg.showAlert(" ID ");
   const serverId = document.getElementById("buyServerId").value.trim();
   const note = document.getElementById("buyNote").value.trim();
-
   try {
     const res = await fetch(API_URL + "/api/buy", {
       method: "POST",
@@ -262,23 +235,19 @@ async function confirmBuy() {
     const data = await res.json();
     tg.showAlert(data.message);
     showWallet();
-  } catch (e) {
-    tg.showAlert("Error — ");
-  }
+  } catch (e) { tg.showAlert("Error — "); }
 }
 
-// ===== Register =====
+// ===== Register / Login =====
 async function registerUser() {
   const name = document.getElementById("regName").value.trim();
   const phone = document.getElementById("regPhone").value.trim();
   const pw = document.getElementById("regPassword").value;
   const cpw = document.getElementById("regConfirm").value;
-
   if (!name) return tg.showAlert(" ");
   if (!phone || phone.length < 7) return tg.showAlert("  ");
   if (!pw || pw.length < 4) return tg.showAlert("   ");
   if (pw !== cpw) return tg.showAlert("  ");
-
   try {
     const res = await fetch(API_URL + "/api/register", {
       method: "POST",
@@ -303,7 +272,6 @@ async function loginUser() {
   const pw = document.getElementById("loginPassword").value;
   if (!name) return tg.showAlert(" ");
   if (!pw) return tg.showAlert(" ");
-
   try {
     const res = await fetch(API_URL + "/api/login", {
       method: "POST",
@@ -333,6 +301,7 @@ function logoutUser() {
   });
 }
 
+// ===== Check User =====
 async function checkUser() {
   const isLoggedIn = localStorage.getItem("logged_in");
   try {
@@ -356,6 +325,7 @@ async function checkUser() {
   } catch (e) { showRegister(); }
 }
 
+// ===== App Status / Balance / Topup =====
 async function checkAppStatus() {
   try {
     const res = await fetch(API_URL + "/api/status");
@@ -389,10 +359,8 @@ async function submitTopup() {
   if (!selectedPay) return tg.showAlert(" ");
   const amount = document.getElementById("topupAmount").value;
   if (!amount || amount < 1000) return tg.showAlert(" , ");
-
   const receiptFile = document.getElementById("receipt").files[0];
   if (!receiptFile) return tg.showAlert(" ");
-
   const reader = new FileReader();
   reader.onload = async function(e) {
     const receiptB64 = e.target.result.split(",")[1];
@@ -416,6 +384,7 @@ async function submitTopup() {
   reader.readAsDataURL(receiptFile);
 }
 
+// ===== On Load =====
 window.onload = async () => {
   if (user) {
     await checkUser();

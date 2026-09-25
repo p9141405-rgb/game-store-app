@@ -14,7 +14,7 @@ body {
   padding-bottom: 30px;
 }
 
-/* ===== Wallet Card ===== */
+/* Wallet Card */
 .wallet-card {
   background: linear-gradient(135deg, #2AABEE, #7B2FF7);
   border-radius: 20px;
@@ -22,27 +22,21 @@ body {
   margin-bottom: 20px;
   box-shadow: 0 8px 24px rgba(42,171,238,0.3);
 }
-
 .wallet-top {
   display: flex;
   justify-content: space-between;
   font-size: 14px;
   margin-bottom: 16px;
-  opacity: 0.95;
 }
-
 .wallet-balance {
   display: flex;
   align-items: baseline;
   gap: 6px;
   margin-bottom: 16px;
 }
-
 .wallet-balance h2 { font-size: 36px; font-weight: 700; }
-.wallet-balance p { font-size: 16px; opacity: 0.9; }
-
+.wallet-balance p { font-size: 16px; }
 .wallet-actions { display: flex; gap: 10px; }
-
 .wallet-actions button {
   flex: 1;
   padding: 12px;
@@ -54,24 +48,13 @@ body {
   font-weight: 600;
   cursor: pointer;
 }
-
 .wallet-actions button:active { background: rgba(255,255,255,0.35); }
 
-/* ===== Section Title ===== */
-.section-title {
-  font-size: 16px;
-  margin-bottom: 12px;
-  color: #fff;
-}
+/* Section Title */
+.section-title { font-size: 16px; margin-bottom: 12px; }
 
-/* ===== Game List ===== */
-.game-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
+/* Game List */
+.game-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
 .game-card {
   display: flex;
   align-items: center;
@@ -81,14 +64,8 @@ body {
   border-radius: 16px;
   padding: 12px;
   cursor: pointer;
-  transition: 0.2s;
 }
-
-.game-card:active {
-  transform: scale(0.98);
-  border-color: #2AABEE;
-}
-
+.game-card:active { transform: scale(0.98); border-color: #2AABEE; }
 .game-img {
   width: 60px;
   height: 60px;
@@ -97,19 +74,17 @@ body {
   flex-shrink: 0;
   background: #000;
 }
-
 .game-info { flex: 1; min-width: 0; }
-.game-info h3 { font-size: 15px; color: #fff; margin-bottom: 3px; }
+.game-info h3 { font-size: 15px; margin-bottom: 3px; }
 .game-info p { font-size: 12px; color: #8888aa; }
 
-/* ===== Item Grid (Buying Menu) ===== */
+/* Item Grid */
 .item-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin-bottom: 16px;
 }
-
 .item-btn {
   background: linear-gradient(135deg, #1a1a2e, #16162a);
   border: 1px solid #2a2a4a;
@@ -119,22 +94,12 @@ body {
   font-size: 13px;
   text-align: left;
   cursor: pointer;
-  transition: 0.2s;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
-
-.item-btn:active {
-  transform: scale(0.97);
-  border-color: #2AABEE;
-}
-
-.item-btn b {
-  color: #2AABEE;
-  font-size: 14px;
-}
-
+.item-btn:active { transform: scale(0.97); border-color: #2AABEE; }
+.item-btn b { color: #2AABEE; font-size: 14px; }
 .section-head {
   grid-column: span 2;
   color: #2AABEE;
@@ -145,14 +110,8 @@ body {
   border-bottom: 1px solid #2a2a4a;
 }
 
-/* ===== Inputs & Forms ===== */
-.label {
-  font-size: 14px;
-  color: #8888aa;
-  margin: 16px 0 8px;
-  display: block;
-}
-
+/* Inputs */
+.label { font-size: 14px; color: #8888aa; margin: 16px 0 8px; display: block; }
 .input {
   width: 100%;
   padding: 14px 16px;
@@ -164,10 +123,9 @@ body {
   outline: none;
   margin-bottom: 12px;
 }
-
 .input:focus { border-color: #2AABEE; }
 
-/* ===== Info Box ===== */
+/* Info Box */
 .info-box {
   background: linear-gradient(135deg, #1e1e3a, #1a1a2e);
   border: 1px solid #2AABEE;
@@ -175,18 +133,11 @@ body {
   padding: 16px;
   margin-top: 16px;
 }
-
-.info-title {
-  font-size: 14px;
-  color: #2AABEE;
-  font-weight: 700;
-  margin-bottom: 12px;
-}
-
+.info-title { font-size: 14px; color: #2AABEE; font-weight: 700; margin-bottom: 12px; }
 .info-box p { font-size: 14px; margin-bottom: 8px; color: #ccc; }
 .info-box b { color: #fff; font-size: 15px; }
 
-/* ===== Buttons ===== */
+/* Buttons */
 .submit-btn {
   width: 100%;
   padding: 16px;
@@ -199,9 +150,7 @@ body {
   margin-top: 12px;
   cursor: pointer;
 }
-
 .submit-btn:active { opacity: 0.8; }
-
 .back-btn {
   padding: 8px 16px;
   background: #1a1a2e;
@@ -212,17 +161,10 @@ body {
   font-size: 14px;
   cursor: pointer;
 }
-
 .page-title { font-size: 22px; margin-bottom: 20px; }
 
-/* ===== Payment Buttons ===== */
-.pay-methods {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
+/* Payment */
+.pay-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
 .pay-btn {
   padding: 16px;
   background: #1a1a2e;
@@ -233,8 +175,4 @@ body {
   font-weight: 600;
   cursor: pointer;
 }
-
-.pay-btn.active {
-  border-color: #2AABEE;
-  background: linear-gradient(135deg, #2AABEE, #7B2FF7);
-}
+.pay-btn.active { border-color: #2AABEE; background: linear-gradient(135deg, #2AABEE, #7B2FF7); }
