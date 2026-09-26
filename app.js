@@ -8,8 +8,7 @@ let appOpen = true;
 let userProfile = null;
 let currentBalance = 0;
 
-// ⭐ သင့် Termux URL (Screenshot ထဲက နောက်ဆုံးရ URL ကို ထည့်ပေးထားပါတယ်)
-// Termux ပြန်ဖွင့်လိုက်ရင် URL အသစ်ကို ဒီနေရာမှာ အစားထိုးပါ ⭐
+// ⭐ သင့် Termux URL (နောက်ဆုံးပို့ထားတဲ့ URL ကို ထည့်ပေးထားပါတယ်)
 const API_URL = "https://princess-landing-own-begun.trycloudflare.com";
 const ADMIN_USERNAME = "pyae_phyo_12327";
 
