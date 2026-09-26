@@ -76,22 +76,22 @@
     <h3 class="section-title">🎮 ဂိမ်းများ</h3>
     <div class="game-list">
       <div class="game-card" onclick="openGame('mlbb')">
-        <img src="mlbb.png" class="game-img">
+        <img src="mlbb.png" class="game-img" onerror="this.src='https://via.placeholder.com/60x60?text=MLBB'">
         <div class="game-info"><h3>Mobile Legends</h3><p>Diamond / Pass</p></div>
         <span style="color:#2AABEE; font-size:20px;">›</span>
       </div>
       <div class="game-card" onclick="openGame('pubg')">
-        <img src="pubg.png" class="game-img">
+        <img src="pubg.png" class="game-img" onerror="this.src='https://via.placeholder.com/60x60?text=PUBG'">
         <div class="game-info"><h3>PUBG Mobile</h3><p>UC / Packs</p></div>
         <span style="color:#2AABEE; font-size:20px;">›</span>
       </div>
       <div class="game-card" onclick="openGame('magic')">
-        <img src="magic.png" class="game-img">
+        <img src="magic.png" class="game-img" onerror="this.src='https://via.placeholder.com/60x60?text=Magic'">
         <div class="game-info"><h3>Magic Chess Go Go</h3><p>Diamond / WP</p></div>
         <span style="color:#2AABEE; font-size:20px;">›</span>
       </div>
       <div class="game-card" onclick="openGame('premium')">
-        <img src="premium.png" class="game-img">
+        <img src="premium.png" class="game-img" onerror="this.src='https://via.placeholder.com/60x60?text=Premium'">
         <div class="game-info"><h3>App Premium</h3><p>Subscriptions</p></div>
         <span style="color:#2AABEE; font-size:20px;">›</span>
       </div>
@@ -101,7 +101,7 @@
   <div id="gameView" class="screen" style="display:none;">
     <button class="back-btn" onclick="showWallet()">← နောက်သို့</button>
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
-      <img id="gameHeaderImg" src="" class="game-img">
+      <img id="gameHeaderImg" src="" class="game-img" onerror="this.src='https://via.placeholder.com/60x60?text=Game'">
       <h2 id="gameHeaderTitle" style="font-size:20px;"></h2>
     </div>
     <div id="gameItemsList" class="item-grid"></div>
@@ -188,6 +188,15 @@
       <p>🕐 အချိန်: <b id="successTime">-</b></p>
     </div>
 
+    <!-- App Premium အတွက် ကျေးဇူးတင်စာ ပြရန် -->
+    <div id="thankYouBox" style="display:none; margin-top: 20px;">
+      <div class="info-box" style="background: linear-gradient(135deg, #00b89422, #00cec922); border-color: #00b894; text-align: center;">
+        <p style="color:#fff; font-size:16px; font-weight:bold; margin-bottom:8px;">🎉 ဝယ်ယူအားပေးမှုအတွက် ကျေးဇူးတင်ပါသည်!</p>
+        <p style="color:#ccc; font-size:14px;">သင်၏ ပစ္စည်းကို မကြာမီ ပို့ဆောင်ပေးပါမည်။</p>
+      </div>
+    </div>
+
+    <!-- အခြားဂိမ်းများအတွက် Admin ဆက်သွယ်ရန် -->
     <div id="adminContactBox" style="margin-top: 20px;">
       <div class="info-box" style="background: linear-gradient(135deg, #2AABEE22, #7B2FF722); border-color: #2AABEE; text-align: center;">
         <p style="color:#fff; font-size:14px; margin-bottom:12px;">📨 အော်ဒါ ရယူရန် Admin ဆီ ဆက်သွယ်ပါ</p>
@@ -199,7 +208,6 @@
     <button class="back-btn" onclick="showWallet()" style="width:100%; margin-top:20px; padding:14px;">← Wallet သို့ ပြန်သွားမည်</button>
   </div>
 
-  <!-- ⭐ Toast Notification -->
   <div id="toastBox" class="toast-box"></div>
 
   <script src="app.js"></script>

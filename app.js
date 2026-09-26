@@ -8,11 +8,11 @@ let appOpen = true;
 let userProfile = null;
 let currentBalance = 0;
 
-// ⭐ သင့် Termux URL အသစ် ထည့်ပြီးသား
+// ⭐ သင့် Termux URL (Screenshot ထဲက နောက်ဆုံးရ URL ကို ထည့်ပေးထားပါတယ်)
+// Termux ပြန်ဖွင့်လိုက်ရင် URL အသစ်ကို ဒီနေရာမှာ အစားထိုးပါ ⭐
 const API_URL = "https://princess-landing-own-begun.trycloudflare.com";
 const ADMIN_USERNAME = "pyae_phyo_12327";
 
-// ⭐ Toast Notification (အပေါ်ကနေ ကျလာမည်)
 function showToast(message, type = "info") {
   const box = document.getElementById("toastBox");
   if (!box) return;
@@ -22,7 +22,6 @@ function showToast(message, type = "info") {
   setTimeout(() => { box.classList.remove("show"); }, 3000);
 }
 
-// ===== ITEMS DATA =====
 const ITEMS = {
   mlbb: {
     title: "Mobile Legends",
@@ -158,7 +157,6 @@ const ITEMS = {
 let currentBuy = null;
 let currentBuyGameKey = "";
 
-// ===== Screen Management =====
 function hideAll() {
   ["loadingView", "registerView", "loginView", "walletView", "gameView", "topupView", "profileView", "buyView", "successView"].forEach(id => {
     const el = document.getElementById(id);
@@ -210,7 +208,6 @@ function showGame(key) {
   });
 }
 
-// ===== Open Buy =====
 async function openBuy(key, gameTitle, itemName, price) {
   hideAll();
   document.getElementById("buyView").style.display = "block";
@@ -241,7 +238,6 @@ async function openBuy(key, gameTitle, itemName, price) {
   currentBuy = { key, game: gameTitle, item: itemName, price: price };
 }
 
-// ===== Confirm Buy =====
 async function confirmBuy() {
   if (!currentBuy) return;
   
@@ -295,7 +291,6 @@ async function confirmBuy() {
   }
 }
 
-// ===== Success View =====
 function showSuccess(newBalance) {
   hideAll();
   document.getElementById("successView").style.display = "block";
@@ -307,16 +302,28 @@ function showSuccess(newBalance) {
     year: 'numeric', month: '2-digit', day: '2-digit',
     hour: '2-digit', minute: '2-digit'
   });
-  document.getElementById("adminContactBox").style.display = "block";
+
+  // ⭐ App Premium ဝယ်ရင် Admin ဆက်သွယ်ရန် ဖျောက်ပြီး ကျေးဇူးတင်စာ ပြမည်
+  const isPremium = currentBuy.game === "App Premium";
+  const adminBox = document.getElementById("adminContactBox");
+  const thankYouBox = document.getElementById("thankYouBox");
+
+  if (isPremium) {
+    adminBox.style.display = "none";
+    thankYouBox.style.display = "block";
+  } else {
+    adminBox.style.display = "block";
+    thankYouBox.style.display = "none";
+  }
+  
+  localStorage.setItem("cached_balance", newBalance);
 }
 
-// ⭐ Admin Chat ကို စာမပါဘဲ ဖွင့်မည်
 function openAdminChat() {
   const url = `https://t.me/${ADMIN_USERNAME}`;
   tg.openTelegramLink(url);
 }
 
-// ===== Register =====
 async function registerUser() {
   const name = document.getElementById("regName").value.trim();
   const phone = document.getElementById("regPhone").value.trim();
@@ -345,7 +352,6 @@ async function registerUser() {
   } catch (e) { showToast("Error — ပြန်စမ်းပါ", "error"); }
 }
 
-// ===== Login =====
 async function loginUser() {
   const name = document.getElementById("loginName").value.trim();
   const pw = document.getElementById("loginPassword").value;
@@ -370,18 +376,17 @@ async function loginUser() {
   } catch (e) { showToast("Error — ပြန်စမ်းပါ", "error"); }
 }
 
-// ===== Logout =====
 function logoutUser() {
   tg.showConfirm("အကောင့်မှ ထွက်မည်လား?", (ok) => {
     if (ok) {
       localStorage.removeItem("logged_in");
+      localStorage.removeItem("cached_balance");
       userProfile = null;
       showLogin();
     }
   });
 }
 
-// ===== Check User =====
 async function checkUser() {
   const isLoggedIn = localStorage.getItem("logged_in");
   try {
@@ -405,7 +410,6 @@ async function checkUser() {
   } catch (e) { showRegister(); }
 }
 
-// ===== App Status =====
 async function checkAppStatus() {
   try {
     const res = await fetch(API_URL + "/api/status");
@@ -414,9 +418,15 @@ async function checkAppStatus() {
   } catch (e) { console.log(e); }
 }
 
-// ===== Balance =====
 async function loadBalance() {
   if (!user) return;
+  
+  const cachedBal = localStorage.getItem("cached_balance");
+  if (cachedBal) {
+    const balEl = document.getElementById("balance");
+    if (balEl) balEl.innerText = parseInt(cachedBal).toLocaleString();
+  }
+
   try {
     const res = await fetch(API_URL + "/api/balance", {
       method: "POST",
@@ -425,12 +435,17 @@ async function loadBalance() {
     });
     const data = await res.json();
     currentBalance = data.balance;
-    document.getElementById("balance").innerText = data.balance.toLocaleString();
+    
+    const balEl = document.getElementById("balance");
+    if (balEl) balEl.innerText = data.balance.toLocaleString();
+    
+    localStorage.setItem("cached_balance", data.balance);
     return data.balance;
-  } catch (e) { console.log(e); }
+  } catch (e) { 
+    console.log(e); 
+  }
 }
 
-// ===== Payment Method =====
 function selectPay(method, btn) {
   selectedPay = method;
   document.querySelectorAll(".pay-btn").forEach(b => b.classList.remove("active"));
@@ -439,7 +454,6 @@ function selectPay(method, btn) {
   document.getElementById("selectedMethod").innerText = method;
 }
 
-// ===== Submit Topup =====
 async function submitTopup() {
   if (!selectedPay) return showToast("ငွေလွှဲနည်းလမ်း ရွေးပါ", "error");
   const amount = document.getElementById("topupAmount").value;
@@ -469,7 +483,6 @@ async function submitTopup() {
   reader.readAsDataURL(receiptFile);
 }
 
-// ===== On Load =====
 window.onload = async () => {
   if (user) {
     await checkUser();
