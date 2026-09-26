@@ -8,8 +8,8 @@ let appOpen = true;
 let userProfile = null;
 let currentBalance = 0;
 
-// ⭐ သင့် Termux URL (နောက်ဆုံးပို့ထားတဲ့ URL ကို ထည့်ပေးထားပါတယ်)
-const API_URL = "https://princess-landing-own-begun.trycloudflare.com";
+// ⭐ သင့် Termux URL အသစ် (ပုံထဲမှာ ရလာတဲ့ URL ကို ထည့်ပေးထားပါတယ်)
+const API_URL = "https://subsection-split-become-socks.trycloudflare.com";
 const ADMIN_USERNAME = "pyae_phyo_12327";
 
 function showToast(message, type = "info") {
@@ -315,6 +315,7 @@ function showSuccess(newBalance) {
     thankYouBox.style.display = "none";
   }
   
+  // ⭐ လက်ကျန်ငွေကို Local Storage မှာ သိမ်းထားမည်
   localStorage.setItem("cached_balance", newBalance);
 }
 
@@ -379,7 +380,7 @@ function logoutUser() {
   tg.showConfirm("အကောင့်မှ ထွက်မည်လား?", (ok) => {
     if (ok) {
       localStorage.removeItem("logged_in");
-      localStorage.removeItem("cached_balance");
+      localStorage.removeItem("cached_balance"); // ⭐ Cache ရှင်းမည်
       userProfile = null;
       showLogin();
     }
@@ -389,11 +390,16 @@ function logoutUser() {
 async function checkUser() {
   const isLoggedIn = localStorage.getItem("logged_in");
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000); // ၈ စက္ကန့် ကျော်ရင် ရပ်မည်
+    
     const res = await fetch(API_URL + "/api/user_status", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ user_id: user.id })
+      body: JSON.stringify({ user_id: user.id }),
+      signal: controller.signal
     });
+    clearTimeout(timeoutId);
     const data = await res.json();
     if (data.registered) {
       userProfile = data.user;
@@ -406,7 +412,16 @@ async function checkUser() {
     } else {
       showRegister();
     }
-  } catch (e) { showRegister(); }
+  } catch (e) { 
+    console.log(e);
+    // Error တက်ရင်လည်း Wallet ကို ပြပေးမည် (Cached data ရှိရင်)
+    if (isLoggedIn === "yes") {
+        showWallet();
+        showToast("⚠️ Network Error. Showing cached data.", "error");
+    } else {
+        showRegister();
+    }
+  }
 }
 
 async function checkAppStatus() {
@@ -420,6 +435,7 @@ async function checkAppStatus() {
 async function loadBalance() {
   if (!user) return;
   
+  // ⭐ Local Storage ထဲက လက်ကျန်ငွေကို ချက်ချင်းပြမည် (မပျောက်စေရန်)
   const cachedBal = localStorage.getItem("cached_balance");
   if (cachedBal) {
     const balEl = document.getElementById("balance");
@@ -438,6 +454,7 @@ async function loadBalance() {
     const balEl = document.getElementById("balance");
     if (balEl) balEl.innerText = data.balance.toLocaleString();
     
+    // ⭐ API ကနေ ရလာတဲ့ လက်ကျန်ငွေကို Local Storage မှာ သိမ်းထားမည်
     localStorage.setItem("cached_balance", data.balance);
     return data.balance;
   } catch (e) { 
@@ -483,8 +500,27 @@ async function submitTopup() {
 }
 
 window.onload = async () => {
+  // ⭐ App စဖွင့်ချင်း လက်ကျန်ငွေကို ချက်ချင်းပြမည် (Loading မှာ ရပ်မနေစေရန်)
+  const cachedBal = localStorage.getItem("cached_balance");
+  const isLoggedIn = localStorage.getItem("logged_in");
+  
+  if (isLoggedIn === "yes" && cachedBal) {
+    hideAll();
+    document.getElementById("walletView").style.display = "block";
+    document.getElementById("balance").innerText = parseInt(cachedBal).toLocaleString();
+  }
+
   if (user) {
+    // ၈ စက္ကန့်အတွင်း Backend နဲ့ မချိတ်ဆက်နိုင်ရင် Wallet ကို ပြပေးမည်
+    const timeout = setTimeout(() => {
+        console.log("Backend timeout, showing fallback");
+        const isLogged = localStorage.getItem("logged_in");
+        if (isLogged === "yes") showWallet();
+        else showRegister();
+    }, 8000);
+
     await checkUser();
+    clearTimeout(timeout);
     checkAppStatus();
   } else {
     hideAll();
